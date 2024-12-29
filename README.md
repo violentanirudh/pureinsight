@@ -5,7 +5,14 @@ Pure Insight empowers you to make healthier, informed decisions by unveiling the
 
 # TEAM
 
-Liza
-Megha
-Dhruvil
-Anirudh 
+- Liza
+- Megha
+- Dhruvil
+- Anirudh 
+
+
+
+# LOGS
+
+#01 29/12/24 : Anirudh : Landing Page
+#02 29/12/24 : Anirudh : Account Page (Sign up and Sign in)
