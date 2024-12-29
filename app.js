@@ -13,6 +13,10 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
+app.get('/account', (req, res) => {
+    res.render('account');
+})
+
 // Start the server
 app.listen(port, () => {
     console.log(`App running on http://localhost:${port}`);

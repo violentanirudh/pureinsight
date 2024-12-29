@@ -1,0 +1,33 @@
+<nav class="bg-white">
+    <div class="w-full mx-auto px-4">
+        <div class="flex justify-between h-16">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <span class="text-green-700 text-xl font-bold">PureInsight</span>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden sm:flex items-center space-x-8">
+                <a href="/api" class="text-zinc-600 hover:text-green-700 transition-colors">API</a>
+                <a href="/pricing" class="text-zinc-600 hover:text-green-700 transition-colors">Pricing</a>
+                <a href="/account" class="bg-green-700 text-white px-8 py-3 rounded hover:bg-green-800 transition-colors">Account</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="sm:hidden flex items-center">
+                <button class="text-zinc-600" id="mobile-menu-button">
+                    <i data-feather="menu"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden" id="mobile-menu">
+            <div class="flex justify-between items-center py-4">
+                <a href="/api" class="text-zinc-600 hover:text-green-700 transition-colors">API</a>
+                <a href="/pricing" class="text-zinc-600 hover:text-green-700 transition-colors">Pricing</a>
+                <a href="/account" class="text-zinc-600 hover:text-green-700 transition-colors">Account</a>
+            </div>
+        </div>
+    </div>
+</nav>
