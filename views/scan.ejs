@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Analysis</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 p-4">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow p-6">
+        <input type="file" id="imageInput" accept="image/*" class="hidden">
+        <button onclick="document.getElementById('imageInput').click()" 
+                class="bg-blue-500 text-white px-6 py-2 rounded-lg">
+            Select Image
+        </button>
+
+        <div id="cropperContainer" class="mt-4 hidden">
+            <img id="image" class="max-w-full">
+            <button onclick="analyzeCroppedImage()" 
+                    class="mt-4 bg-green-500 text-white px-6 py-2 rounded-lg">
+                Analyze
+            </button>
+        </div>
+
+        <!-- Added loading spinner -->
+        <div id="loadingSpinner" class="hidden mt-4">
+            <div class="flex items-center justify-center">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
+                <span class="ml-2">Processing image...</span>
+            </div>
+        </div>
+
+        <div id="results" class="mt-4 prose"></div>
+    </div>
+
+    <script>
+        let cropper;
+
+        marked.setOptions({
+            breaks: true,
+            gfm: true
+        });
+
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const image = document.getElementById('image');
+                    image.src = e.target.result;
+                    document.getElementById('cropperContainer').classList.remove('hidden');
+                    
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    
+                    cropper = new Cropper(image, {
+                        aspectRatio: NaN,
+                        viewMode: 1,
+                        dragMode: 'move',
+                        autoCropArea: 1,
+                        restore: false,
+                        modal: true,
+                        guides: true,
+                        highlight: true,
+                        cropBoxMovable: true,
+                        cropBoxResizable: true,
+                        toggleDragModeOnDblclick: true
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function analyzeCroppedImage() {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            loadingSpinner.classList.remove('hidden');
+            
+            const canvas = cropper.getCroppedCanvas();
+            canvas.toBlob((blob) => {
+                const formData = new FormData();
+                formData.append('image', blob);
+
+                fetch('/process-image', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    loadingSpinner.classList.add('hidden');
+                    document.getElementById('results').innerHTML = marked.parse(data.analysis);
+                })
+                .catch(error => {
+                    loadingSpinner.classList.add('hidden');
+                    console.error('Error:', error);
+                    document.getElementById('results').innerHTML = 
+                        '<div class="text-red-500">Error processing image. Please try again.</div>';
+                });
+            });
+        }
+    </script>
+</body>
+</html>
