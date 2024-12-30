@@ -11,11 +11,25 @@
 </head>
 <body class="bg-gray-50 p-4">
     <div class="max-w-4xl mx-auto bg-white rounded-lg shadow p-6">
-        <input type="file" id="imageInput" accept="image/*" class="hidden">
-        <button onclick="document.getElementById('imageInput').click()" 
-                class="bg-blue-500 text-white px-6 py-2 rounded-lg">
-            Select Image
-        </button>
+        <input type="file" id="imageInput" accept="image/*" capture="environment" class="hidden">
+        <div class="flex gap-4">
+            <button onclick="document.getElementById('imageInput').click()" 
+                    class="bg-blue-500 text-white px-6 py-2 rounded-lg">
+                Select Image
+            </button>
+            <button onclick="startCamera()" 
+                    class="bg-purple-500 text-white px-6 py-2 rounded-lg">
+                Open Camera
+            </button>
+        </div>
+
+        <div id="cameraContainer" class="mt-4 hidden">
+            <video id="video" class="max-w-full" autoplay playsinline></video>
+            <button onclick="captureImage()" 
+                    class="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg">
+                Capture
+            </button>
+        </div>
 
         <div id="cropperContainer" class="mt-4 hidden">
             <img id="image" class="max-w-full">
@@ -25,7 +39,6 @@
             </button>
         </div>
 
-        <!-- Added loading spinner -->
         <div id="loadingSpinner" class="hidden mt-4">
             <div class="flex items-center justify-center">
                 <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
@@ -38,11 +51,65 @@
 
     <script>
         let cropper;
+        let stream;
+        let video;
 
         marked.setOptions({
             breaks: true,
             gfm: true
         });
+
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' }
+                });
+                video = document.getElementById('video');
+                video.srcObject = stream;
+                document.getElementById('cameraContainer').classList.remove('hidden');
+                document.getElementById('cropperContainer').classList.add('hidden');
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+                alert('Unable to access camera. Please ensure you have granted camera permissions.');
+            }
+        }
+
+        function captureImage() {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            const image = document.getElementById('image');
+            image.src = canvas.toDataURL('image/jpeg');
+            
+            // Stop camera stream
+            stream.getTracks().forEach(track => track.stop());
+            document.getElementById('cameraContainer').classList.add('hidden');
+            
+            // Show and initialize cropper
+            document.getElementById('cropperContainer').classList.remove('hidden');
+            if (cropper) {
+                cropper.destroy();
+            }
+            initializeCropper();
+        }
+
+        function initializeCropper() {
+            cropper = new Cropper(document.getElementById('image'), {
+                aspectRatio: NaN,
+                viewMode: 1,
+                dragMode: 'move',
+                autoCropArea: 1,
+                restore: false,
+                modal: true,
+                guides: true,
+                highlight: true,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                toggleDragModeOnDblclick: true
+            });
+        }
 
         document.getElementById('imageInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -52,24 +119,12 @@
                     const image = document.getElementById('image');
                     image.src = e.target.result;
                     document.getElementById('cropperContainer').classList.remove('hidden');
+                    document.getElementById('cameraContainer').classList.add('hidden');
                     
                     if (cropper) {
                         cropper.destroy();
                     }
-                    
-                    cropper = new Cropper(image, {
-                        aspectRatio: NaN,
-                        viewMode: 1,
-                        dragMode: 'move',
-                        autoCropArea: 1,
-                        restore: false,
-                        modal: true,
-                        guides: true,
-                        highlight: true,
-                        cropBoxMovable: true,
-                        cropBoxResizable: true,
-                        toggleDragModeOnDblclick: true
-                    });
+                    initializeCropper();
                 };
                 reader.readAsDataURL(file);
             }
