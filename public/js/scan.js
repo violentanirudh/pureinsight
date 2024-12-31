@@ -253,10 +253,7 @@ analyzeAllBtn.addEventListener('click', async () => {
 
         updateStatus('Validating Ingredients...');
         const detectResult = await detectResponse.json();
-        const detectedTexts = detectResult.responses.map((response) => response.text || '').join(' ');
-
-        console.log("Detected Text : ", detectedTexts)
-        
+        const detectedTexts = detectResult.responses.map((response) => response.text || '').join(' ');        
         
         updateStatus('Analyzing Ingredients...');
         const analyzeResponse = await fetch('/api/analyze-text', {
@@ -270,8 +267,6 @@ analyzeAllBtn.addEventListener('click', async () => {
         }
 
         const analyzeResult = await analyzeResponse.json();
-
-        console.log(analyzeResult)
         
         // Show final results
         resultsContainer.innerHTML = `

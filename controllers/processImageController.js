@@ -8,6 +8,8 @@ const detectTextHandler = asyncHandler(async (req, res) => {
         return res.status(400).json({ error: 'No image files provided.' });
     }
 
+    console.log(req.files)
+
     // Validate that at most 4 files are uploaded
     if (req.files.length > 4) {
         return res.status(400).json({ error: 'You can upload a maximum of 4 images at a time.' });
