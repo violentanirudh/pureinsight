@@ -10,8 +10,6 @@ Pure Insight empowers you to make healthier, informed decisions by unveiling the
 - Dhruvil
 - Anirudh 
 
-
-
 # LOGS
 
 - 01 29/12/24 : Anirudh : Landing Page

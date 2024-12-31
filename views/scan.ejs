@@ -3,159 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Analysis</title>
+    <title>PureInsight - Image Upload</title>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap');
+        * {
+            font-family: "Parkinsans";
+        }
+    </style>
+    <link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet">
+    <script src="https://unpkg.com/cropperjs/dist/cropper.js"></script>
 </head>
-<body class="bg-gray-50 p-4">
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow p-6">
-        <input type="file" id="imageInput" accept="image/*" capture="environment" class="hidden">
-        <div class="flex gap-4">
-            <button onclick="document.getElementById('imageInput').click()" 
-                    class="bg-blue-500 text-white px-6 py-2 rounded-lg">
-                Select Image
-            </button>
-            <button onclick="startCamera()" 
-                    class="bg-purple-500 text-white px-6 py-2 rounded-lg">
-                Open Camera
-            </button>
+<body class="max-w-screen-xl mx-auto px-4 sm:px-8 py-6">
+
+    <!-- Navigation -->
+    <%- include('partials/nav') %>
+
+    <!-- Main Container -->
+    <div class="w-full sm:w-1/2 mx-auto" id="mainContainer">
+        <!-- Toggle Buttons -->
+        <div class="flex mb-8 bg-zinc-100 p-1 rounded">
+            <button id="barcodeBtn" class="w-1/2 py-2 text-center rounded bg-green-700 text-white">Barcode</button>
+            <button id="imagesBtn" class="w-1/2 py-2 text-center rounded text-zinc-600">Images</button>
         </div>
 
-        <div id="cameraContainer" class="mt-4 hidden">
-            <video id="video" class="max-w-full" autoplay playsinline></video>
-            <button onclick="captureImage()" 
-                    class="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg">
-                Capture
-            </button>
-        </div>
-
-        <div id="cropperContainer" class="mt-4 hidden">
-            <img id="image" class="max-w-full">
-            <button onclick="analyzeCroppedImage()" 
-                    class="mt-4 bg-green-500 text-white px-6 py-2 rounded-lg">
-                Analyze
-            </button>
-        </div>
-
-        <div id="loadingSpinner" class="hidden mt-4">
-            <div class="flex items-center justify-center">
-                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
-                <span class="ml-2">Processing image...</span>
+        <!-- Barcode Section -->
+        <div id="barcodeSection">
+            <div class="bg-white rounded border border-zinc-200 p-6 mb-6">
+                <h2 class="text-lg font-bold mb-4">Scan Barcode</h2>
+                <!-- Add your barcode scanning input or functionality here -->
+                <p class="text-zinc-700">Barcode scanning feature will go here.</p>
             </div>
         </div>
 
-        <div id="results" class="mt-4 prose"></div>
+        <!-- Images Section -->
+        <div id="imagesSection" class="hidden">
+            <!-- Header Section -->
+            <div class="bg-white rounded border border-zinc-200 p-6 space-y-6">
+
+                <!-- Image Upload Section -->
+                <div class="flex justify-between items-center gap-2">
+                    <label class="flex justify-center items-center py-4 w-1/2 border border-zinc-200 rounded hover:bg-zinc-100 cursor-pointer transition duration-200">
+                            <i data-feather="upload-cloud" class="text-zinc-400 mr-2"></i>
+                            <p class="text-sm text-zinc-400">Select</p>
+                        <input type="file" id="imageInput" class="hidden" multiple accept="image/*">
+                    </label>
+                    <button id="startCameraBtn" 
+                            class="flex justify-center items-center py-4 w-1/2 border border-zinc-200 rounded hover:bg-zinc-100 cursor-pointer transition duration-200 text-zinc-400">
+                        <i data-feather="camera" class="mr-2"></i>
+                        <p class="text-sm text-zinc-400">Open</p>
+                    </button>
+                </div>
+
+                <div id="cameraContainer" class="hidden relative w-full rounded">
+                    <video id="cameraVideo" 
+                           class="w-full rounded-lg border border-zinc-200" 
+                           autoplay playsinline></video>
+                    <button id="captureBtn" 
+                            class="absolute mt-2 bottom-2 left-1/2 -translate-x-1/2 text-sm bg-green-700 text-white px-4 py-2 rounded flex items-center mx-auto">
+                        <i data-feather="camera" class="mr-2"></i>Take Photo
+                    </button>
+                </div>
+                <canvas id="captureCanvas" class="hidden"></canvas>
+
+                <!-- Image Preview and Cropping Section -->
+                <div id="imagePreviewContainer" class="hidden">
+                    <div class="relative border border-zinc-200 rounded overflow-hidden">
+                        <img id="previewImage" class="max-w-full">
+                        <button id="cropBtn" 
+                                class="absolute top-2 right-2 bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center transition duration-200 hover:bg-blue-600">
+                            <i data-feather="crop" class="mr-1"></i> Crop
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-sm text-zinc-400">* Provide Nutritional and Ingredients Image.</p>
+
+                <!-- Cropped Images Container -->
+                <div id="croppedImagesContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-4 justify-start">
+                    <button id="analyzeAllBtn" 
+                            class="bg-green-700 text-white px-6 w-full py-3 rounded flex items-center justify-center disabled:opacity-50 transition duration-200 hover:bg-green-800">
+                        Analyze Product
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <script>
-        let cropper;
-        let stream;
-        let video;
+    <div id="resultsContainer" class="bg-white rounded-lg border max-w-screen-xl border-zinc-200 p-6 hidden prose">
+        <h2 class="text-xl font-bold mb-4 text-zinc-800">Results</h2>
+        <div id="detectedTextContainer" class="mb-4"></div>
+        <div id="analysisContainer"></div>
+    </div>
 
-        marked.setOptions({
-            breaks: true,
-            gfm: true
-        });
-
-        async function startCamera() {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'environment' }
-                });
-                video = document.getElementById('video');
-                video.srcObject = stream;
-                document.getElementById('cameraContainer').classList.remove('hidden');
-                document.getElementById('cropperContainer').classList.add('hidden');
-            } catch (err) {
-                console.error('Error accessing camera:', err);
-                alert('Unable to access camera. Please ensure you have granted camera permissions.');
-            }
-        }
-
-        function captureImage() {
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            
-            const image = document.getElementById('image');
-            image.src = canvas.toDataURL('image/jpeg');
-            
-            // Stop camera stream
-            stream.getTracks().forEach(track => track.stop());
-            document.getElementById('cameraContainer').classList.add('hidden');
-            
-            // Show and initialize cropper
-            document.getElementById('cropperContainer').classList.remove('hidden');
-            if (cropper) {
-                cropper.destroy();
-            }
-            initializeCropper();
-        }
-
-        function initializeCropper() {
-            cropper = new Cropper(document.getElementById('image'), {
-                aspectRatio: NaN,
-                viewMode: 1,
-                dragMode: 'move',
-                autoCropArea: 1,
-                restore: false,
-                modal: true,
-                guides: true,
-                highlight: true,
-                cropBoxMovable: true,
-                cropBoxResizable: true,
-                toggleDragModeOnDblclick: true
-            });
-        }
-
-        document.getElementById('imageInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const image = document.getElementById('image');
-                    image.src = e.target.result;
-                    document.getElementById('cropperContainer').classList.remove('hidden');
-                    document.getElementById('cameraContainer').classList.add('hidden');
-                    
-                    if (cropper) {
-                        cropper.destroy();
-                    }
-                    initializeCropper();
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        function analyzeCroppedImage() {
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            loadingSpinner.classList.remove('hidden');
-            
-            const canvas = cropper.getCroppedCanvas();
-            canvas.toBlob((blob) => {
-                const formData = new FormData();
-                formData.append('image', blob);
-
-                fetch('/process-image', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    loadingSpinner.classList.add('hidden');
-                    document.getElementById('results').innerHTML = marked.parse(data.analysis);
-                })
-                .catch(error => {
-                    loadingSpinner.classList.add('hidden');
-                    console.error('Error:', error);
-                    document.getElementById('results').innerHTML = 
-                        '<div class="text-red-500">Error processing image. Please try again.</div>';
-                });
-            });
-        }
-    </script>
+    <!-- Scripts -->
+    <script src="/js/scan.js"></script>
+    <script src="/js/common.js"></script>
 </body>
 </html>
