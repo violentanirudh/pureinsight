@@ -14,6 +14,14 @@ app.use(express.json()); // Parse JSON payloads
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded form data
 app.use(cors(corsOptions));
 
+app.use('/js', express.static(path.join(__dirname, 'public/js'), {
+    setHeaders: (res, path) => {
+        if (path.endsWith('.js')) {
+            res.setHeader('Content-Type', 'application/javascript');
+        }
+    }
+}));
+
 // Import routes
 const mainRoutes = require('./routes/mainRoutes');
 const processImageRoutes = require('./routes/processImageRoutes');
