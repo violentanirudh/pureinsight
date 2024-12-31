@@ -220,9 +220,9 @@ analyzeAllBtn.addEventListener('click', async () => {
     
     // Create a processing status element
     const processingStatus = document.createElement('div');
-    processingStatus.className = 'flex flex-col items-center space-y-4 p-6 bg-white rounded-lg shadow';
+    processingStatus.className = 'flex flex-col items-center space-y-4 p-6 bg-white rounded';
     processingStatus.innerHTML = `
-        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-green-700"></div>
+        <div class="animate-spin rounded-full h-10 w-10 border-2 border-green-100 border-b-green-700"></div>
         <div id="statusText" class="text-lg font-semibold text-zinc-700"></div>
     `;
     resultsContainer.innerHTML = '';
@@ -294,7 +294,7 @@ analyzeAllBtn.addEventListener('click', async () => {
 
     } catch (error) {
         resultsContainer.innerHTML = `
-            <div class="bg-red-50 p-6 rounded-lg shadow">
+            <div class="bg-red-50 p-4">
                 <div class="flex items-center space-x-3">
                     <i data-feather="alert-circle" class="text-red-500"></i>
                     <p class="text-red-700">Error: ${error.message}</p>

@@ -52,6 +52,9 @@ Required output:
 8. Do not include any backticks, escape sequences, or code formatting.
 9. Ensure the response is valid HTML that can be directly rendered in a browser or webpage.
 
+Provide the HTML as Plain Text (not as a code block).
+In case the product ingredients and nutritional information are not clear, just ask them to specify the details.
+Also if any required output is not possible to generate, just hide the particular value or section.
 Input text to analyze: ${detectedText}
 `;
 
