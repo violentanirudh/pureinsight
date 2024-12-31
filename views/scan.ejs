@@ -146,7 +146,7 @@
                 .then(response => response.json())
                 .then(data => {
                     loadingSpinner.classList.add('hidden');
-                    document.getElementById('results').innerHTML = marked.parse(data.analysis);
+                    document.getElementById('results').innerHTML = JSON.stringify(analysis);
                 })
                 .catch(error => {
                     loadingSpinner.classList.add('hidden');
