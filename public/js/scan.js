@@ -255,6 +255,9 @@ analyzeAllBtn.addEventListener('click', async () => {
         const detectResult = await detectResponse.json();
         const detectedTexts = detectResult.responses.map((response) => response.text || '').join(' ');
 
+        console.log(detectedTexts)
+        
+        
         updateStatus('Analyzing Ingredients...');
         const analyzeResponse = await fetch('/api/analyze-text', {
             method: 'POST',
@@ -268,7 +271,7 @@ analyzeAllBtn.addEventListener('click', async () => {
 
         const analyzeResult = await analyzeResponse.json();
 
-        console.log(detectedTexts, analyzeResult)
+        console.log(analyzeResult)
         
         // Show final results
         resultsContainer.innerHTML = `
