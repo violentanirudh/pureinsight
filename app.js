@@ -78,6 +78,8 @@ app.post('/process-image', upload.single('image'), async (req, res) => {
         
         const detectedText = result.fullTextAnnotation.text;
 
+        res.json({detectedText: detectedText});
+
         // Step 2: Process text with Gemini AI
         const prompt = `You are a certified nutritionist and food safety expert. Analyze the provided food ingredients and provide a detailed assessment.
 
