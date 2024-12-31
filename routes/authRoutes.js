@@ -45,6 +45,7 @@ router.post('/register', async (req, res) => {
       role,
       verificationToken,
       isVerified: false, // Ensure the user is not verified initially
+      credit: 100,
     });
 
     // Save the user to the database
@@ -56,6 +57,7 @@ router.post('/register', async (req, res) => {
     res.status(201).json({
       message:
         'User registered successfully. Please check your email for verification.',
+        credit: user.credit,
     });
   } catch (error) {
     console.error(error);
