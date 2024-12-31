@@ -21,6 +21,7 @@ app.use('/js', express.static(path.join(__dirname, 'public/js'), {
     }
 }));
 
+
 // Import routes
 const mainRoutes = require('./routes/mainRoutes');
 const processImageRoutes = require('./routes/processImageRoutes');
