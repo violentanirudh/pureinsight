@@ -1,8 +1,6 @@
 const vision = require('@google-cloud/vision');
 
-const visionClient = new vision.ImageAnnotatorClient({
-    keyFilename: process.env.CREDENTIALS_PATH,
-});
+const visionClient = new vision.ImageAnnotatorClient();
 
 async function extractText(imageBuffer) {
     const [result] = await visionClient.textDetection({
