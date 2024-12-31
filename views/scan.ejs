@@ -81,9 +81,19 @@
                 <p class="text-sm text-zinc-400">* Provide Nutritional and Ingredients Image.</p>
 
                 <!-- Cropped Images Container -->
-                <div id="croppedImagesContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                <div id="croppedImagesContainer" class="grid grid-cols-2 lg:grid-cols-3 gap-4"></div>
 
                 <!-- Action Buttons -->
+
+                <input 
+                    type="text" 
+                    id="eanInput" 
+                    maxlength="13" 
+                    pattern="\d{13}" 
+                    class="w-full px-3 py-2 border border-zinc-300 rounded focus:outline-none focus:border-green-700"
+                    placeholder="Enter 13-digit EAN code below Barcode"
+                >
+
                 <button id="analyzeAllBtn" 
                         class="bg-green-700 block text-white px-6 w-full py-3 rounded flex items-center justify-center disabled:opacity-50 transition duration-200 hover:bg-green-800">
                     Analyze Product

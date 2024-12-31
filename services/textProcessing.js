@@ -25,37 +25,79 @@ async function detectText(imageBuffers) {
 async function analyzeText(detectedText) {
     try {
 
-const prompt = `
-You are a certified nutritionist and food safety expert. Analyze the provided food ingredients and provide a detailed assessment.
-Be honest—if the product has more harm than good, reflect it in a low rating.
+const prompt = `You are a certified nutritionist, food safety expert, and skincare specialist. Analyze the provided product (cosmetic or food) based on its ingredients and provide a detailed assessment. Be honest—if the product has more harm than good, reflect it in a low rating.
 
 Required output:
-1. A numerical health rating (1-10) based on the balance of harm and benefit. [rating in big bold font size (x/10)]
-2. Dietary compatibility analysis, clearly stating who should avoid this product. [unordered list, red and green color]
-3. Allergen identification with clear warnings for major allergens. [unordered list, red color]
-4. Evidence-based health benefits, if any. Include only the 10 most important benefits, prioritized by their significance to health. [unordered list, green color]
-5. Potential side effects of consuming the product. [unordered list, red text]
-6. Complete nutritional breakdown with concerns highlighted in red. [unordered list, 10 most important ones only]
-7. Ingredient analysis with harmful components clearly marked in red. [unordered list]
 
-**Format requirements for consistency:**
-1. Use <h2> for main sections (e.g., "Numerical Health Rating," "Dietary Compatibility Analysis").
-2. Use <table> for comparative data (e.g., nutritional breakdown).
-3. Use <ul> and <li> for true lists (e.g., allergens, side effects, health benefits).
-4. Use <strong> and TailwindCSS classes like "text-red-700", "text-yellow-700", or "text-green-700" to indicate harmful, moderate, or beneficial aspects respectively.
-5. Include a color-coded health rating:
-   - 1-4: Red (Harmful to health)
-   - 5-7: Yellow (Moderate health impact)
-   - 8-10: Green (Healthy choice)
-6. Add a consistent disclaimer at the end: "Note: Always consult a healthcare provider if you have specific dietary restrictions or allergies."
-7. Ensure all sections are present, even if some data is unavailable (e.g., use "No significant benefits identified" if there are no health benefits).
-8. Do not include any backticks, escape sequences, or code formatting.
-9. Ensure the response is valid HTML that can be directly rendered in a browser or webpage.
+Heading: Product Analysis Report
 
-Provide the HTML as Plain Text (not as a code block).
-In case the product ingredients and nutritional information are not clear, just ask them to specify the details.
-Also if any required output is not possible to generate, just hide the particular value or section.
+- Health / Quality Rating
+
+    Provide a numerical rating (1-10) based on the balance of harm and benefit.
+    Use bold font size (lg and colored text) for the rating (e.g., 8/10).
+        1-4: Red (text-red-700, Harmful or low-quality product)
+        5-7: Yellow (text-yellow-700, Moderate impact or quality)
+        8-10: Green (text-green-700, Healthy or high-quality choice)
+        use classes as per specified here.
+
+- Product Type-Specific Analysis
+For Food Products:
+
+    Dietary Compatibility Analysis: Clearly state who should avoid this product.
+        Use unordered lists with TailwindCSS classes:
+            Green text (text-green-700) for groups who can consume it safely.
+            Red text (text-red-700) for groups who should avoid it.
+    Allergen Identification: Highlight major allergens in red text.
+    Evidence-Based Health Benefits: List up to 10 benefits prioritized by significance (green text).
+    Potential Side Effects: Highlight known risks or side effects in red text.
+    Complete Nutritional Breakdown:
+        Only include the 10 most important nutrients.
+        Only include Nutrient, Per 100g, Concerns columns.
+        Present key nutritional data in a table format.
+        Highlight concerns (e.g., high sugar, sodium) in red text.
+
+For Cosmetic Products:
+
+    Skin Type Recommendations: Indicate whether the product is suitable for dry, oily, sensitive, or combination skin types.
+        Specify if it is best for day or night use.
+    Ingredient Functionality Analysis:
+        Provide detailed information about each ingredient (e.g., moisturizer, antioxidant, exfoliant).
+        Clearly mark harmful or irritating components in red text.
+    Cruelty-Free and Vegan Status: Indicate whether the product meets these standards.
+        Use green text for cruelty-free/vegan products and red text otherwise.
+    Environmental Impact Assessment:
+        Evaluate packaging material, recycling options, and sustainability practices.
+        Highlight eco-friendly aspects in green text.
+
+4. Format Requirements
+
+    Use <h2> tags for main sections like "Numerical Health/Quality Rating" or "Ingredient Functionality Analysis."
+    Use <ul> and <li> for lists (e.g., allergens, benefits, side effects).
+    Use <table> for comparative data such as nutritional breakdowns or environmental impact summaries.
+    Apply TailwindCSS classes for color coding:
+        text-red-700 for harmful aspects.
+        text-yellow-700 for moderate concerns.
+        text-green-700 for beneficial aspects.
+    Add a consistent disclaimer at the end:
+    "Note: Always consult a healthcare provider or dermatologist if you have specific dietary restrictions, allergies, or skin conditions."
+    Ensure all sections are present even if some data is unavailable (e.g., use "No significant benefits identified" if there are no health benefits).
+    Provide valid HTML that can be directly rendered in a browser or webpage.
+
+Additional Features for Premium Package:
+
+    Personalized recommendations based on user-specific needs:
+        For food: Suggest alternatives based on dietary preferences or allergies.
+        For cosmetics: Recommend products based on skin conditions like acne, aging, hyperpigmentation, etc.
+    Highlight unique selling points such as "Best for sensitive skin," "Ideal for nighttime use," or "Eco-friendly packaging."
+
 Input text to analyze: ${detectedText}
+
+If any required output cannot be generated due to unclear product details, just don't include the section in response.
+
+If invalid products are detected (e.g., mismatched items, images of separate products), respond with this message:
+"Error: The provided input appears invalid. Please ensure you upload a clear image of a single product with visible ingredients or provide accurate product details. Separate products cannot be analyzed together. Kindly try again with valid input."
+
+Provide the html (and tailwindcss classes) as plain text (not as a codeblock) and don't include tags "<html> <head> and <body>"
 `;
 
         const analysis = await genAIServices.generateAnalysis(prompt);

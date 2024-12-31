@@ -1,13 +1,25 @@
 const asyncHandler = require('../middlewares/asyncHandler');
 const { detectText, analyzeText } = require('../services/textProcessing');
 
+// Function to validate EAN-13 code
+const isValidEAN = (ean) => {
+    if (typeof ean !== 'string' || ean.length !== 13 || !/^\d+$/.test(ean)) return false;
+    return true;
+};
+
 // Function to handle file uploads and detect text
 const detectTextHandler = asyncHandler(async (req, res) => {
+    const { ean } = req.body;
+
+    // Validate that the EAN is provided and valid
+    if (!ean || !isValidEAN(ean)) {
+        return res.status(400).json({ error: 'A valid 13-digit EAN code is required.' });
+    }
+
     // Validate that files are provided
     if (!req.files || req.files.length === 0) {
         return res.status(400).json({ error: 'No image files provided.' });
     }
-
 
     // Validate that at most 4 files are uploaded
     if (req.files.length > 4) {
@@ -22,7 +34,6 @@ const detectTextHandler = asyncHandler(async (req, res) => {
         const responses = await detectText(imageBuffers);
 
         // Respond with the results
-        console.log(responses)  
         res.json({ responses });
     } catch (error) {
         console.error('Error during text detection:', error);
@@ -32,17 +43,28 @@ const detectTextHandler = asyncHandler(async (req, res) => {
 
 // Function to analyze detected text
 const analyzeTextHandler = asyncHandler(async (req, res) => {
-    const { detectedText } = req.body;
+    const { detectedText, ean } = req.body;
 
+    // Validate that the EAN is provided and valid
+    if (!ean || !isValidEAN(ean)) {
+        return res.status(400).json({ error: 'A valid 13-digit EAN code is required.' });
+    }
+
+    // Validate that detected text is provided
     if (!detectedText) {
         return res.status(400).json({ error: 'Detected text is required.' });
     }
 
-    // Step 2: Analyze the detected text
-    const analysis = await analyzeText(detectedText);
+    try {
+        // Analyze the detected text
+        const analysis = await analyzeText(detectedText);
 
-    // Return the analysis result as a response
-    res.json({ analysis });
+        // Return the analysis result as a response
+        res.json({ analysis });
+    } catch (error) {
+        console.error('Error during text analysis:', error);
+        res.status(500).json({ error: 'Failed to analyze text. Please try again later.' });
+    }
 });
 
 // Export both handlers as named exports
