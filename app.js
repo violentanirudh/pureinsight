@@ -1,11 +1,18 @@
 require('dotenv').config(); // Load environment variables from .env file
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const app = express();
+
+const corsOptions = {
+    origin: 'https://pureinsight.vercel.app',
+    optionsSuccessStatus: 200
+};
 
 // Middleware to parse JSON and URL-encoded form data
 app.use(express.json()); // Parse JSON payloads
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded form data
+app.use(cors(corsOptions));
 
 // Import routes
 const mainRoutes = require('./routes/mainRoutes');
