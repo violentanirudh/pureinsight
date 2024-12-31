@@ -8,7 +8,6 @@ const detectTextHandler = asyncHandler(async (req, res) => {
         return res.status(400).json({ error: 'No image files provided.' });
     }
 
-    console.log(req.files)
 
     // Validate that at most 4 files are uploaded
     if (req.files.length > 4) {
@@ -23,6 +22,7 @@ const detectTextHandler = asyncHandler(async (req, res) => {
         const responses = await detectText(imageBuffers);
 
         // Respond with the results
+        console.log(responses)  
         res.json({ responses });
     } catch (error) {
         console.error('Error during text detection:', error);
