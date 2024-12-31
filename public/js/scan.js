@@ -255,7 +255,7 @@ analyzeAllBtn.addEventListener('click', async () => {
         const detectResult = await detectResponse.json();
         const detectedTexts = detectResult.responses.map((response) => response.text || '').join(' ');
 
-        console.log(detectedTexts)
+        console.log("Detected Text : ", detectedTexts)
         
         
         updateStatus('Analyzing Ingredients...');
