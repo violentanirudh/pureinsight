@@ -267,6 +267,8 @@ analyzeAllBtn.addEventListener('click', async () => {
         }
 
         const analyzeResult = await analyzeResponse.json();
+
+        console.log(detectedTexts, analyzeResult)
         
         // Show final results
         resultsContainer.innerHTML = `
