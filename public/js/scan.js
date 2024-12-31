@@ -20,8 +20,18 @@ const resultsContainer = document.getElementById('resultsContainer');
 const detectedTextContainer = document.getElementById('detectedTextContainer');
 const analysisContainer = document.getElementById('analysisContainer');
 
-// Initialize Feather Icons
-feather.replace();
+
+function updateAnalyzeButton() {
+    if (croppedImages.length > 0) {
+        analyzeAllBtn.removeAttribute('disabled');
+        analyzeAllBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    } else {
+        analyzeAllBtn.setAttribute('disabled', 'true');
+        analyzeAllBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+}
+
+updateAnalyzeButton();
 
 // Handle file input
 imageInput.addEventListener('change', (e) => {
@@ -53,32 +63,102 @@ imageInput.addEventListener('change', (e) => {
     }
 });
 
+startCameraBtn.addEventListener('click', async () => {
+    if (stream) {
+        // Close camera
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+        cameraContainer.classList.add('hidden');
+        startCameraBtn.querySelector('p').textContent = 'Open';
+    } else {
+        // Open camera
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 },
+                    facingMode: 'environment'
+                }, 
+                audio: false 
+            });
+            cameraVideo.srcObject = stream;
+            cameraContainer.classList.remove('hidden');
+            startCameraBtn.querySelector('p').textContent = 'Close';
+        } catch (err) {
+            console.error('Error accessing camera:', err);
+        }
+    }
+});
+
+// Camera capture handler
+captureBtn.addEventListener('click', () => {
+    // Set canvas dimensions to match video
+    captureCanvas.width = cameraVideo.videoWidth;
+    captureCanvas.height = cameraVideo.videoHeight;
+    
+    // Draw video frame to canvas
+    const context = captureCanvas.getContext('2d');
+    context.drawImage(cameraVideo, 0, 0, captureCanvas.width, captureCanvas.height);
+    
+    // Convert canvas to image data
+    const imageData = captureCanvas.toDataURL('image/jpeg');
+    
+    // Send to cropper
+    previewImage.src = imageData;
+    imagePreviewContainer.classList.remove('hidden');
+    
+    // Initialize cropper
+    if (cropper) {
+        cropper.destroy();
+    }
+    cropper = new Cropper(previewImage, {
+        aspectRatio: NaN,
+        viewMode: 1,
+        dragMode: 'move',
+        background: false,
+        movable: true,
+        rotatable: true,
+        scalable: true,
+        zoomable: true,
+        zoomOnTouch: true,
+        zoomOnWheel: true,
+    });
+    
+    // Stop camera stream and reset UI
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
+    cameraContainer.classList.add('hidden');
+    startCameraBtn.classList.remove('hidden');
+    cameraVideo.srcObject = null;
+});
+
 // Handle crop button click
 document.getElementById('cropBtn').addEventListener('click', () => {
     if (!cropper) return;
-
     const croppedCanvas = cropper.getCroppedCanvas();
     const croppedImage = croppedCanvas.toDataURL('image/jpeg');
     croppedImages.push(croppedImage);
-
+    
     // Add cropped image preview
     const imagePreview = document.createElement('div');
     imagePreview.className = 'relative';
     imagePreview.innerHTML = `
-        <img src="${croppedImage}" 
-             class="w-full rounded w-full h-32 object-cover" 
-        <button class="absolute top-2 right-2 bg-red-700 text-white p-1 rounded">
+        <img src="${croppedImage}" class="w-full rounded w-full h-32 object-cover">
+        <button class="absolute top-2 right-2 bg-red-700 text-white p-1 rounded delete-btn">
             <i data-feather="trash-2" class="w-4 h-4"></i>
         </button>
     `;
     croppedImagesContainer.appendChild(imagePreview);
     feather.replace();
-
+    
     // Destroy cropper and hide preview container
     cropper.destroy();
     cropper = null;
     imagePreviewContainer.classList.add('hidden');
     previewImage.src = '';
+    
+    updateAnalyzeButton();
 });
 
 // Helper function to convert base64 to blob
@@ -101,6 +181,7 @@ croppedImagesContainer.addEventListener('click', (e) => {
         const index = Array.from(croppedImagesContainer.children).indexOf(imagePreview);
         croppedImages.splice(index, 1);
         imagePreview.remove();
+        updateAnalyzeButton();
     }
 });
 
@@ -189,14 +270,14 @@ analyzeAllBtn.addEventListener('click', async () => {
         
         // Show final results
         resultsContainer.innerHTML = `
-            <div class="bg-white p-6 rounded-lg shadow">
+            <div class="bg-white">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-xl font-bold text-zinc-800">Analysis Results</h3>
-                    <button id="backBtn" class="text-green-700 hover:text-green-800">
+                    <button id="backBtn" class="inline-flex gap-2 items-center text-green-700 hover:text-green-800">
                         <i data-feather="arrow-left"></i> Back
                     </button>
                 </div>
-                <div class="prose max-w-none">
+                <div class="prose w-full">
                     ${analyzeResult.analysis}
                 </div>
             </div>
@@ -259,72 +340,3 @@ imagesBtn.addEventListener('click', () => {
 });
 
 // Start camera stream
-startCameraBtn.addEventListener('click', async () => {
-    if (stream) {
-        // Close camera
-        stream.getTracks().forEach(track => track.stop());
-        stream = null;
-        cameraContainer.classList.add('hidden');
-        startCameraBtn.querySelector('p').textContent = 'Open';
-    } else {
-        // Open camera
-        try {
-            stream = await navigator.mediaDevices.getUserMedia({ 
-                video: { 
-                    width: { ideal: 1920 },
-                    height: { ideal: 1080 },
-                    facingMode: 'environment'
-                }, 
-                audio: false 
-            });
-            cameraVideo.srcObject = stream;
-            cameraContainer.classList.remove('hidden');
-            startCameraBtn.querySelector('p').textContent = 'Close';
-        } catch (err) {
-            console.error('Error accessing camera:', err);
-        }
-    }
-});
-
-// Camera capture handler
-captureBtn.addEventListener('click', () => {
-    // Set canvas dimensions to match video
-    captureCanvas.width = cameraVideo.videoWidth;
-    captureCanvas.height = cameraVideo.videoHeight;
-    
-    // Draw video frame to canvas
-    const context = captureCanvas.getContext('2d');
-    context.drawImage(cameraVideo, 0, 0, captureCanvas.width, captureCanvas.height);
-    
-    // Convert canvas to image data
-    const imageData = captureCanvas.toDataURL('image/jpeg');
-    
-    // Send to cropper
-    previewImage.src = imageData;
-    imagePreviewContainer.classList.remove('hidden');
-    
-    // Initialize cropper
-    if (cropper) {
-        cropper.destroy();
-    }
-    cropper = new Cropper(previewImage, {
-        aspectRatio: NaN,
-        viewMode: 1,
-        dragMode: 'move',
-        background: false,
-        movable: true,
-        rotatable: true,
-        scalable: true,
-        zoomable: true,
-        zoomOnTouch: true,
-        zoomOnWheel: true,
-    });
-    
-    // Stop camera stream and reset UI
-    if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-    }
-    cameraContainer.classList.add('hidden');
-    startCameraBtn.classList.remove('hidden');
-    cameraVideo.srcObject = null;
-});

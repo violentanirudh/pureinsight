@@ -55,7 +55,6 @@ Required output:
 Input text to analyze: ${detectedText}
 `;
 
-
         const analysis = await genAIServices.generateAnalysis(prompt);
         return analysis;
     } catch (error) {

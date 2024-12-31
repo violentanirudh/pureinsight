@@ -84,18 +84,16 @@
                 <div id="croppedImagesContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 
                 <!-- Action Buttons -->
-                <div class="flex gap-4 justify-start">
-                    <button id="analyzeAllBtn" 
-                            class="bg-green-700 text-white px-6 w-full py-3 rounded flex items-center justify-center disabled:opacity-50 transition duration-200 hover:bg-green-800">
-                        Analyze Product
-                    </button>
-                </div>
+                <button id="analyzeAllBtn" 
+                        class="bg-green-700 block text-white px-6 w-full py-3 rounded flex items-center justify-center disabled:opacity-50 transition duration-200 hover:bg-green-800">
+                    Analyze Product
+                </button>
             </div>
         </div>
 
     </div>
 
-    <div id="resultsContainer" class="bg-white rounded-lg border max-w-screen-xl border-zinc-200 p-6 hidden prose">
+    <div id="resultsContainer" class="w-full sm:w-1/2 mx-auto hidden prose">
         <h2 class="text-xl font-bold mb-4 text-zinc-800">Results</h2>
         <div id="detectedTextContainer" class="mb-4"></div>
         <div id="analysisContainer"></div>
