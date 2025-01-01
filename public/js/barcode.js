@@ -24,7 +24,6 @@ function startQuagga() {
           halfSample: true
       },
       decoder: {
-          readers: ["ean_reader"]
       },
       locate: true
   };
@@ -38,17 +37,20 @@ function startQuagga() {
       Quagga.start();
   });
 
+  // Log every detected barcode
   Quagga.onProcessed(function (result) {
-      if (result && result.boxes) {
-          result.boxes.filter(box => box !== undefined).forEach(box => {
-              Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, scannerContainer, { color: 'green', lineWidth: 2 });
-          });
+      // Log intermediate results for debugging
+      if (result && result.codeResult && result.codeResult.code) {
+          console.log("Intermediate detection:", result.codeResult.code);
       }
   });
 
+  // Log final detected barcodes
   Quagga.onDetected(function (result) {
       const code = result.codeResult.code;
-      console.log("Barcode detected:", code);
+      console.log("Final detected barcode:", code);
+
+      // Display the detected barcode in the input field
       const barcodeResult = document.getElementById('barcode-result');
       barcodeResult.value = code;
   });
