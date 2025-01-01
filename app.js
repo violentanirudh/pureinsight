@@ -1,18 +1,26 @@
-require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config(); // Load environment variables
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const connectDB = require('./services/mongodb'); // Import the database connection function
+const cookieParser = require('cookie-parser');
+
 const app = express();
 
+// Connect to MongoDB
+connectDB();
+
 const corsOptions = {
-    optionsSuccessStatus: 200
+    optionsSuccessStatus: 200,
 };
 
 // Middleware to parse JSON and URL-encoded form data
-app.use(express.json()); // Parse JSON payloads
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded form data
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 
+// Serve static files
 app.use('/js', express.static(path.join(__dirname, 'public/js'), {
     setHeaders: (res, path) => {
         if (path.endsWith('.js')) {
@@ -21,9 +29,10 @@ app.use('/js', express.static(path.join(__dirname, 'public/js'), {
     }
 }));
 
-
 // Import routes
 const mainRoutes = require('./routes/mainRoutes');
+const authRoutes = require('./routes/authRoutes');
+const protectedRoutes = require('./routes/protectedRoutes');
 const processImageRoutes = require('./routes/processImageRoutes');
 
 // Set view engine and static files directory
@@ -33,9 +42,11 @@ app.use(express.static('public'));
 
 // Use routes
 app.use('/', mainRoutes);
+app.use('/', protectedRoutes);
 app.use('/api', processImageRoutes);
+app.use('/auth', authRoutes);
 
-// Global error handler (for unhandled errors)
+// Global error handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(err.status || 500).json({

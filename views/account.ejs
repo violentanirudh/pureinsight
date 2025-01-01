@@ -12,6 +12,10 @@
             font-family: "Parkinsans";
         }
     </style>
+    <!-- Add after the existing head content -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 </head>
 <body class="bg-white max-w-screen-xl mx-auto px-4 sm:px-8 py-6">
 
@@ -75,29 +79,130 @@
     </div>
 
     <script>
+
         const signInBtn = document.getElementById('signInBtn');
         const signUpBtn = document.getElementById('signUpBtn');
-        const signInForm = document.getElementById('signInForm');
-        const signUpForm = document.getElementById('signUpForm');
-
+        const signInForm = document.getElementById('signInForm').querySelector('form');
+        const signUpForm = document.getElementById('signUpForm').querySelector('form');
+    
+        // Toast notification function
+        const showToast = (message, isError = false) => {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                    background: isError ? "#ef4444" : "#22c55e",
+                    borderRadius: "8px",
+                    padding: "12px 24px",
+                }
+            }).showToast();
+        };
+    
+        // Toggle form visibility
         signInBtn.addEventListener('click', () => {
             signInBtn.classList.add('bg-green-700', 'text-white');
             signInBtn.classList.remove('bg-transparent', 'text-gray-600');
-            signUpBtn.classList.remove('bg-green-700', 't   ext-white');
+            signUpBtn.classList.remove('bg-green-700', 'text-white');
             signUpBtn.classList.add('bg-transparent', 'text-gray-600');
-            signInForm.classList.remove('hidden');
-            signUpForm.classList.add('hidden');
+            signInForm.parentElement.classList.remove('hidden');
+            signUpForm.parentElement.classList.add('hidden');
         });
-
+    
         signUpBtn.addEventListener('click', () => {
             signUpBtn.classList.add('bg-green-700', 'text-white');
             signUpBtn.classList.remove('bg-transparent', 'text-gray-600');
             signInBtn.classList.remove('bg-green-700', 'text-white');
             signInBtn.classList.add('bg-transparent', 'text-gray-600');
-            signUpForm.classList.remove('hidden');
-            signInForm.classList.add('hidden');
+            signUpForm.parentElement.classList.remove('hidden');
+            signInForm.parentElement.classList.add('hidden');
         });
-    </script>
+    
+        // Handle form submissions
+        signInForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = signInForm.querySelector('input[type="email"]').value;
+            const password = signInForm.querySelector('input[type="password"]').value;
+    
+            try {
+                const response = await fetch('/auth/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+    
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('Login successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = '/scan';
+                    }, 1000);
+                } else {
+                    showToast(data.message || 'Login failed', true);
+                }
+            } catch (error) {
+                showToast('An error occurred during login', true);
+            }
+        });
+    
+        signUpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = signUpForm.querySelector('input[type="email"]').value;
+            const password = signUpForm.querySelector('input[type="password"]').value;
+    
+            try {
+                const response = await fetch('/auth/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+    
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('Registration successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = '/signin';
+                    }, 1000);
+                } else {
+                    showToast(data.message || 'Registration failed', true);
+                }
+            } catch (error) {
+                showToast('An error occurred during registration', true);
+            }
+        });
+    
+        // Add loading state to buttons
+        const addLoadingState = (form) => {
+            const button = form.querySelector('button[type="submit"]');
+            button.disabled = true;
+            button.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+            `;
+        };
+    
+        const removeLoadingState = (form, text) => {
+            const button = form.querySelector('button[type="submit"]');
+            button.disabled = false;
+            button.textContent = text;
+        };
+    
+        // Add loading state to form submissions
+        signInForm.addEventListener('submit', () => addLoadingState(signInForm));
+        signUpForm.addEventListener('submit', () => addLoadingState(signUpForm));
+    </script>    
     <script src="/js/common.js"></script>
+    
 </body>
 </html>

@@ -22,9 +22,17 @@
     const eanInput = document.getElementById('eanInput');
 
     // Function to validate EAN-13 code
-    const isValidEAN = (ean) => {
-        return (ean.length === 13 && /^\d+$/.test(ean))
-    };
+    function isValidEAN(ean) {
+        if (!/^\d{13}$/.test(ean)) return false; // Ensure 13 numeric digits
+    
+        const digits = ean.split('').map(Number);
+        const checkDigit = digits.pop(); // Extract last digit (checksum)
+    
+        const sum = digits.reduce((acc, digit, i) => acc + digit * (i % 2 === 0 ? 1 : 3), 0);
+        const calculatedCheckDigit = (10 - (sum % 10)) % 10;
+    
+        return calculatedCheckDigit === checkDigit;
+    }
 
     document.getElementById('eanInput').addEventListener('input', updateAnalyzeButton);
 
@@ -281,8 +289,10 @@
             if (!analyzeResponse.ok) {
                 throw new Error('Failed to analyze detected texts.');
             }
-    
+
             const analyzeResult = await analyzeResponse.json();
+
+            print(analyzeResult)
             
             // Show final results
             resultsContainer.innerHTML = `
