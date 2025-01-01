@@ -17,7 +17,8 @@
       <p><strong>EAN:</strong> <%= analysis.ean %></p>
       <p><strong>Text:</strong> <%= analysis.text %></p>
       <p><strong>Analysis:</strong></p>
-      <div class="prose"><%- analysis.analysis %></div> <!-- Pretty-print JSON -->
+      <div class="prose"><%- analysis.analysis %></div>
+      <textarea class="w-full h-32 border border-gray-300 rounded p-2 mt-2"><%- analysis.analysis %></textarea>
       <p><strong>Created At:</strong> <%= new Date(analysis.createdAt).toLocaleString() %></p>
       <p><strong>Updated At:</strong> <%= new Date(analysis.updatedAt).toLocaleString() %></p>
 

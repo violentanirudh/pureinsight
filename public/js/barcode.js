@@ -7,7 +7,7 @@ function startQuagga() {
   if (!scannerContainer) {
       scannerContainer = document.createElement('div');
       scannerContainer.id = 'scanner-container';
-      scannerContainer.className = 'w-full h-48 bg-gray-200 flex items-center rounded overflow-hidden relative mb-4';
+      scannerContainer.className = 'w-full h-fit flex items-center rounded overflow-hidden relative mb-4';
       barcodeContainer.prepend(scannerContainer); // Add it to the top of #barcodeContainer
   }
 
@@ -16,23 +16,20 @@ function startQuagga() {
       inputStream: {
           name: "Live",
           type: "LiveStream",
-          target: scannerContainer, // Attach video stream here
+          target: document.querySelector("#scanner-container"), // Target element for the camera feed
           constraints: {
-              width: { min: 640 }, // Minimum resolution
-              height: { min: 480 },
-              facingMode: "environment" // Use rear camera
+              width: 640,
+              height: 480,
+              facingMode: "environment", // Use rear camera
           }
       },
-      locator: {
-          patchSize: "large", // Options: "x-small", "small", "medium", "large", "x-large"
-          halfSample: true
-      },
       decoder: {
-          readers: ["ean_reader"] // Specify the barcode types to scan (e.g., EAN-13)
+          readers: [
+              "ean_reader",       // EAN-13
+          ]
       },
-      locate: true, // Enable barcode localization
-      numOfWorkers: navigator.hardwareConcurrency || 4 // Optimize performance based on available CPU cores
-  };
+      locate: true,
+  }
 
   // Initialize Quagga 2
   Quagga.init(quaggaConfig, function (err) {
@@ -52,13 +49,13 @@ function startQuagga() {
   });
 
   // Handle final detected barcodes
-  Quagga.onDetected(function (result) {
+  Quagga.onDetected(async function (result) {
       const code = result.codeResult.code;
       console.log("Final detected barcode:", code);
 
       // Update the input field with the detected barcode
       const barcodeResult = document.getElementById('barcode-result');
-      if (barcodeResult) {
+      if (barcodeResult && isValidEAN(code)) {
           barcodeResult.value = code;
       }
   });
