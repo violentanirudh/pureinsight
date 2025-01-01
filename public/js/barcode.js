@@ -7,7 +7,7 @@ function startQuagga() {
   if (!scannerContainer) {
       scannerContainer = document.createElement('div');
       scannerContainer.id = 'scanner-container';
-      scannerContainer.className = 'w-[320px] h-[240px] flex items-center rounded overflow-hidden relative mb-4';
+      scannerContainer.className = 'flex items-center rounded overflow-hidden relative mb-4';
       barcodeContainer.prepend(scannerContainer); // Add it to the top of #barcodeContainer
   }
 
@@ -39,13 +39,6 @@ function startQuagga() {
       }
       console.log("Quagga initialized successfully");
       Quagga.start(); // Start scanning
-  });
-
-  // Log every detected barcode (intermediate results)
-  Quagga.onProcessed(function (result) {
-      if (result && result.codeResult && result.codeResult.code) {
-          console.log("Intermediate detection:", result.codeResult.code);
-      }
   });
 
   // Handle final detected barcodes
@@ -87,6 +80,24 @@ startQuagga(); // Start QuaggaJS by default
 // Select DOM elements
 const barcodeInput = document.getElementById('barcode-result');
 const searchBarcodeBtn = document.getElementById('searchBarcodeBtn');
+
+// Function to toggle button state based on EAN validity
+function toggleBarcodeBtn() {
+  const ean = barcodeInput.value.trim();
+  if (isValidEAN(ean)) {
+    searchBarcodeBtn.disabled = false; // Enable button if valid
+    searchBarcodeBtn.classList.remove('opacity-50', 'cursor-not-allowed'); // Optional styling
+  } else {
+    searchBarcodeBtn.disabled = true; // Disable button if invalid
+    searchBarcodeBtn.classList.add('opacity-50', 'cursor-not-allowed'); // Optional styling
+  }
+}
+
+// Add event listener to monitor input changes
+barcodeInput.addEventListener('input', toggleBarcodeBtn);
+
+// Initialize button state on page load
+toggleBarcodeBtn();
 
 // Event listener for "Search Product" button
 searchBarcodeBtn.addEventListener('click', async () => {
