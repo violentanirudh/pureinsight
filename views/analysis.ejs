@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analysis Data</title>
+  <!-- Include Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <div class="container mx-auto my-8">
+    <h1 class="text-3xl font-bold text-center mb-6">Analysis Data</h1>
+
+    <% if (analyses && analyses.length > 0) { %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
+          <thead>
+            <tr class="bg-gray-100 border-b border-gray-200">
+              <th class="px-4 py-2 text-left font-medium text-gray-600">#</th>
+              <th class="px-4 py-2 text-left font-medium text-gray-600">User Name</th>
+              <th class="px-4 py-2 text-left font-medium text-gray-600">EAN</th>
+              <th class="px-4 py-2 text-left font-medium text-gray-600">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% analyses.forEach((analysis, index) => { %>
+              <tr class="<%= index % 2 === 0 ? 'bg-white' : 'bg-gray-50' %> border-b border-gray-200">
+                <td class="px-4 py-2"><%= index + 1 %></td>
+                <!-- Display user name -->
+                <td class="px-4 py-2"><%= analysis.user.email %></td> 
+                <!-- Display EAN -->
+                <td class="px-4 py-2"><%= analysis.ean %></td> 
+                <!-- Button to navigate to /analyses/:id -->
+                <td class="px-4 py-2">
+                  <a href="/analyses/<%= analysis._id %>" 
+                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                    View Analysis
+                  </a>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <!-- No data available message -->
+      <p class="text-center text-lg font-semibold text-gray-500 mt-6">No analysis data available.</p>
+    <% } %>
+
+  </div>
+
+</body>
+</html>
