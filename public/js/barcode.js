@@ -7,7 +7,7 @@ function startQuagga() {
   if (!scannerContainer) {
       scannerContainer = document.createElement('div');
       scannerContainer.id = 'scanner-container';
-      scannerContainer.className = 'w-full h-fit flex items-center rounded overflow-hidden relative mb-4';
+      scannerContainer.className = 'w-[320px] h-[240px] flex items-center rounded overflow-hidden relative mb-4';
       barcodeContainer.prepend(scannerContainer); // Add it to the top of #barcodeContainer
   }
 
