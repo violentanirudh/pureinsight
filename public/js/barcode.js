@@ -62,3 +62,54 @@ document.getElementById('imagesBtn').addEventListener('click', function () {
 });
 
 startQuagga(); // Start QuaggaJS by default
+
+
+// Select DOM elements
+const barcodeInput = document.getElementById('barcode-result');
+const searchBarcodeBtn = document.getElementById('searchBarcodeBtn');
+
+// Event listener for "Search Product" button
+searchBarcodeBtn.addEventListener('click', async () => {
+  const ean = barcodeInput.value.trim();
+
+  try {
+    // Fetch analysis data from the API using EAN
+    const response = await fetch(`/api/analysis/${ean}`);
+    const data = await response.json();
+
+    console.log(data)
+    if (response.ok) {
+      // Display analysis results in the results container
+      resultsContainer.innerHTML = `
+        <div class="bg-white">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold text-zinc-800">Analysis Results</h3>
+            <button id="backBtn" class="inline-flex gap-2 items-center text-green-700 hover:text-green-800">
+              <i data-feather="arrow-left" class="h-4 w-4"></i> Back
+            </button>
+          </div>
+          <div class="prose w-full">
+            ${data.analysis.analysis} <!-- Display analysis object -->
+          </div>
+        </div>
+      `;
+
+      feather.replace()
+
+      // Show results container and hide main container
+      document.getElementById('mainContainer').classList.add('hidden');
+      resultsContainer.classList.remove('hidden');
+
+      // Add back button functionality
+      document.getElementById('backBtn').addEventListener('click', () => {
+        resultsContainer.classList.add('hidden');
+        document.getElementById('mainContainer').classList.remove('hidden');
+      });
+    } else {
+      alert(data.error || 'Failed to fetch analysis data.');
+    }
+  } catch (error) {
+    console.error(error);
+    alert('An error occurred while fetching analysis data.');
+  }
+});

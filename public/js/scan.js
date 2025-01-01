@@ -21,6 +21,31 @@
     const analysisContainer = document.getElementById('analysisContainer');
     const eanInput = document.getElementById('eanInput');
 
+
+    // Toggle Functionality for Barcode and Images Sections
+    const barcodeBtn = document.getElementById('barcodeBtn');
+    const imagesBtn = document.getElementById('imagesBtn');
+    const barcodeSection = document.getElementById('barcodeSection');
+    const imagesSection = document.getElementById('imagesSection');
+
+    barcodeBtn.addEventListener('click', () => {
+        barcodeBtn.classList.add('bg-green-700', 'text-white');
+        barcodeBtn.classList.remove('text-zinc-600');
+        imagesBtn.classList.remove('bg-green-700', 'text-white');
+        imagesBtn.classList.add('text-zinc-600');
+        barcodeSection.classList.remove('hidden');
+        imagesSection.classList.add('hidden');
+    });
+
+    imagesBtn.addEventListener('click', () => {
+        imagesBtn.classList.add('bg-green-700', 'text-white');
+        imagesBtn.classList.remove('text-zinc-600');
+        barcodeBtn.classList.remove('bg-green-700', 'text-white');
+        barcodeBtn.classList.add('text-zinc-600');
+        imagesSection.classList.remove('hidden');
+        barcodeSection.classList.add('hidden');
+    });
+
     // Function to validate EAN-13 code
     function isValidEAN(ean) {
         if (!/^\d{13}$/.test(ean)) return false; // Ensure 13 numeric digits
@@ -347,27 +372,4 @@
 
 
 
-    // Toggle Functionality for Barcode and Images Sections
-    const barcodeBtn = document.getElementById('barcodeBtn');
-    const imagesBtn = document.getElementById('imagesBtn');
-    const barcodeSection = document.getElementById('barcodeSection');
-    const imagesSection = document.getElementById('imagesSection');
-
-    barcodeBtn.addEventListener('click', () => {
-        barcodeBtn.classList.add('bg-green-700', 'text-white');
-        barcodeBtn.classList.remove('text-zinc-600');
-        imagesBtn.classList.remove('bg-green-700', 'text-white');
-        imagesBtn.classList.add('text-zinc-600');
-        barcodeSection.classList.remove('hidden');
-        imagesSection.classList.add('hidden');
-    });
-
-    imagesBtn.addEventListener('click', () => {
-        imagesBtn.classList.add('bg-green-700', 'text-white');
-        imagesBtn.classList.remove('text-zinc-600');
-        barcodeBtn.classList.remove('bg-green-700', 'text-white');
-        barcodeBtn.classList.add('text-zinc-600');
-        imagesSection.classList.remove('hidden');
-        barcodeSection.classList.add('hidden');
-    });
 

@@ -44,6 +44,7 @@ app.use(express.static('public'));
 app.use('/', mainRoutes);
 app.use('/', protectedRoutes);
 app.use('/api', processImageRoutes);
+app.use('/api', processImageRoutes);
 app.use('/auth', authRoutes);
 
 // Global error handler

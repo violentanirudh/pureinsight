@@ -31,17 +31,21 @@
 
         <!-- Barcode Section -->
         <div id="barcodeSection">
-            <div class="bg-white rounded border border-zinc-200 p-6 mb-6">
-              <h2 class="text-lg font-bold mb-4">Scan Barcode</h2>
+            <div class="bg-white rounded border border-zinc-200 p-6 space-y-6">
+              <h2 class="text-lg font-bold">Scan Barcode</h2>
               <div id="barcodeContainer">
 
               </div>
               <input
                 id="barcode-result"
                 type="text"
-                class="text-zinc-700 border border-gray-300 rounded p-2 w-full"
+                class="w-full px-3 py-2 border border-zinc-300 rounded focus:outline-none focus:border-green-700"
                 placeholder="Type Barcode or Scan"
               />
+              <button id="searchBarcodeBtn" 
+                    class="bg-green-700 block text-white px-6 w-full py-3 rounded flex items-center justify-center disabled:opacity-50 transition duration-200 hover:bg-green-800">
+                    Search Product
+                </button>
             </div>
           </div>
           

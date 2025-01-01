@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
   },
   credits: {
     type: Number,
-    default: 0
+    default: 100
   },
   allergies: [{
     type: String
