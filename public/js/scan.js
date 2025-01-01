@@ -289,10 +289,8 @@
             if (!analyzeResponse.ok) {
                 throw new Error('Failed to analyze detected texts.');
             }
-
+    
             const analyzeResult = await analyzeResponse.json();
-
-            print(analyzeResult)
             
             // Show final results
             resultsContainer.innerHTML = `
