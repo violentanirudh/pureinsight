@@ -1,54 +1,65 @@
-// Function to initialize QuaggaJS
 function startQuagga() {
-    // Dynamically create #scanner-container
-    const barcodeContainer = document.getElementById('barcodeContainer');
-    let scannerContainer = document.getElementById('scanner-container');
-    
-    if (!scannerContainer) {
-        scannerContainer = document.createElement('div');
-        scannerContainer.id = 'scanner-container';
-        scannerContainer.className = 'w-full h-48 bg-gray-200 flex items-center rounded overflow-hidden relative mb-4';
-        barcodeContainer.prepend(scannerContainer); // Add it to the top of #barcodeContainer
-    }
+  const barcodeContainer = document.getElementById('barcodeContainer');
+  let scannerContainer = document.getElementById('scanner-container');
 
-    // Configure QuaggaJS
-    const quaggaConfig = {
-        inputStream: {
-            type: "LiveStream",
-            target: scannerContainer, // Attach video stream here
-            constraints: {
-                facingMode: "environment" // Use rear camera
-            }
-        }
-    };
+  if (!scannerContainer) {
+      scannerContainer = document.createElement('div');
+      scannerContainer.id = 'scanner-container';
+      scannerContainer.className = 'w-full h-48 bg-gray-200 flex items-center rounded overflow-hidden relative mb-4';
+      barcodeContainer.prepend(scannerContainer);
+  }
 
-    // Initialize Quagga
-    Quagga.init(quaggaConfig, function (err) {
-        if (err) {
-            console.error("Quagga initialization failed:", err);
-            return;
-        }
-        console.log("Quagga initialized successfully");
-        Quagga.start(); // Start scanning
-    });
+  const quaggaConfig = {
+      inputStream: {
+          type: "LiveStream",
+          target: scannerContainer,
+          constraints: {
+              width: { min: 640 },
+              height: { min: 480 },
+              facingMode: "environment"
+          }
+      },
+      locator: {
+          patchSize: "medium",
+          halfSample: true
+      },
+      decoder: {
+          readers: ["ean_reader"]
+      },
+      locate: true
+  };
 
-    // Handle detected barcodes
-    Quagga.onDetected(function (result) {
-        const barcodeResult = document.getElementById('barcode-result');
-        barcodeResult.value = result.codeResult.code; // Display detected barcode
-        console.log("Barcode detected:", result.codeResult.code);
-    });
+  Quagga.init(quaggaConfig, function (err) {
+      if (err) {
+          console.error("Quagga initialization failed:", err);
+          return;
+      }
+      console.log("Quagga initialized successfully");
+      Quagga.start();
+  });
+
+  Quagga.onProcessed(function (result) {
+      if (result && result.boxes) {
+          result.boxes.filter(box => box !== undefined).forEach(box => {
+              Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, scannerContainer, { color: 'green', lineWidth: 2 });
+          });
+      }
+  });
+
+  Quagga.onDetected(function (result) {
+      const code = result.codeResult.code;
+      console.log("Barcode detected:", code);
+      const barcodeResult = document.getElementById('barcode-result');
+      barcodeResult.value = code;
+  });
 }
 
-// Function to stop QuaggaJS and remove #scanner-container
 function stopQuagga() {
-    Quagga.stop(); // Stop video stream
-
-    // Remove #scanner-container from DOM
-    const scannerContainer = document.getElementById('scanner-container');
-    if (scannerContainer) {
-        scannerContainer.parentNode.removeChild(scannerContainer);
-    }
+  Quagga.stop();
+  const scannerContainer = document.getElementById('scanner-container');
+  if (scannerContainer) {
+      scannerContainer.parentNode.removeChild(scannerContainer);
+  }
 }
 
 // Event listeners for toggling between Barcode and Images sections
