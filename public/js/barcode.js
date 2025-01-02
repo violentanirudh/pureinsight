@@ -1,4 +1,3 @@
-
 function startQuagga() {
   // Dynamically create #scanner-container
   const barcodeContainer = document.getElementById('barcodeContainer');
@@ -11,35 +10,34 @@ function startQuagga() {
       barcodeContainer.prepend(scannerContainer); // Add it to the top of #barcodeContainer
   }
 
-  // Configure Quagga 2
-  const quaggaConfig = {
-      inputStream: {
-          name: "Live",
-          type: "LiveStream",
-          target: document.querySelector("#scanner-container"), // Target element for the camera feed
-          constraints: {
-              width: 640,
-              height: 480,
-              facingMode: "environment", // Use rear camera
-          }
-      },
-      decoder: {
-          readers: [
-              "ean_reader",       // EAN-13
-          ]
-      },
-      locate: true,
-  }
-
   // Initialize Quagga 2
-  Quagga.init(quaggaConfig, function (err) {
-      if (err) {
-          console.error("Quagga initialization failed:", err);
-          return;
-      }
-      console.log("Quagga initialized successfully");
-      Quagga.start(); // Start scanning
-  });
+  Quagga.init({
+    inputStream: {
+        name: "Live",
+        type: "LiveStream",
+        target: document.querySelector("#scanner-container"), // Target element for the camera feed
+        constraints: {
+            width: 640,
+            height: 480,
+            facingMode: "environment", // Use rear camera
+        }
+    },
+    decoder: {
+        readers: [
+            "ean_reader",       // EAN-13
+            "ean_8_reader",     // EAN-8
+            "upc_reader",       // UPC-A
+            "upc_e_reader"      // UPC-E
+        ]
+    },
+    locate: true,
+}, function(err) {
+    if (err) {
+        displayError("Failed to initialize scanner.");
+        return;
+    }
+    Quagga.start();
+});
 
   // Handle final detected barcodes
   Quagga.onDetected(async function (result) {

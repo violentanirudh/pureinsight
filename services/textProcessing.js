@@ -63,11 +63,8 @@ For Cosmetic Products:
     Ingredient Functionality Analysis:
         Provide detailed information about each ingredient (e.g., moisturizer, antioxidant, exfoliant).
         Clearly mark harmful or irritating components in red text.
-    Cruelty-Free and Vegan Status: Indicate whether the product meets these standards.
-        Use green text for cruelty-free/vegan products and red text otherwise.
-    Environmental Impact Assessment:
-        Evaluate packaging material, recycling options, and sustainability practices.
-        Highlight eco-friendly aspects in green text.
+    Allergen Identification: Highlight major allergens in red text.
+    Potential Side Effects: Highlight known risks or side effects in red text.
 
 4. Format Requirements
 
