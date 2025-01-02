@@ -28,7 +28,6 @@ async function analyzeText(detectedText) {
 const prompt = `You are a certified nutritionist, food safety expert, and skincare specialist. Analyze the provided product (cosmetic or food) based on its ingredients and provide a detailed assessment. Be honest—if the product has more harm than good, reflect it in a low rating.
 
 Required output:
-No Heading Needed
 
 - Health / Quality Rating
 

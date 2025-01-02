@@ -21,7 +21,6 @@ function isValidEAN(ean) {
     return calculatedCheckDigit === checkDigit;
 }
 
-// Auth routes
 router.get("/scan", protect("user", "admin"), scan);
 
 router.get("/search", protect("user", "admin"), async (req, res) => {
