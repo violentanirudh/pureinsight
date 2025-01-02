@@ -11,10 +11,16 @@
         * {
             font-family: "Parkinsans";
         }
+        .drawingBuffer {
+            height: 0 !important;
+            width: 0 !important;
+        }
     </style>
     <link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet">
     <script src="https://unpkg.com/cropperjs/dist/cropper.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 <body class="max-w-screen-xl mx-auto px-4 sm:px-8 py-6">
 
@@ -33,7 +39,7 @@
         <div id="barcodeSection">
             <div class="bg-white rounded border border-zinc-200 p-6 space-y-6">
               <h2 class="text-lg font-bold">Scan Barcode</h2>
-              <div id="barcodeContainer" class="flex items-center justify-center">
+              <div id="barcodeContainer" class="flex items-center justify-center h-fit">
 
               </div>
               <input
