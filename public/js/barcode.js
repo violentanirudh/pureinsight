@@ -98,12 +98,6 @@ function startQuagga() {
             facingMode: "environment", // Use rear camera
         }
     },
-    debug: {
-      drawBoundingBox: true,
-      showFrequency: false,
-      drawScanline: false,
-      showPattern: false
-  },
     decoder: {
         readers: [
             "ean_reader",       // EAN-13
@@ -111,6 +105,7 @@ function startQuagga() {
             "upc_e_reader"      // UPC-E
         ]
     },
+    patchSize: 'small',
     locate: true,
 }, function(err) {
     if (err) {
