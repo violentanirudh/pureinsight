@@ -21,29 +21,62 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 100
   },
-  allergies: [{
-    type: String
-  }],
-  illness: [{
-    type: String
-  }],
+  allergies: {
+    type: String,
+    default: ''
+  },
+  illness: { 
+    type: String,
+    default: ''
+  },
   skin: {
-    type: String
+    type: String,
+    default: ''
   },
   height: {
-    type: Number
+    type: Number,
+    default: 0
   },
   weight: {
-    type: Number
+    type: Number,
+    default: 0
   },
   verified: {
     type: Boolean,
     default: false
   },
+  goals: {
+    type: String,
+    default: ''
+  },
   role: {
     type: String,
     enum: ['user', 'admin'],
     default: 'user'
+  },
+  meal: {
+    type: Number,
+    default: 3
+  },
+  activityLevel: {
+    type: String,
+    enum: ['sedentary', 'lightly_active', 'moderately_active', 'very_active', 'super_active'],
+    default: 'sedentary'
+  },
+  gender: {
+    type: String,
+    enum: ['male', 'female', 'non_binary', 'prefer_not_to_say'],
+    default: 'prefer_not_to_say'
+  },
+  ageGroup: {
+    type: String,
+    enum: ['child', 'teen', 'adult', 'senior'],
+    default: 'adult'
+  },
+  dietaryRestriction: {
+    type: String,
+    enum: ['vegan', 'vegetarian', 'non_vegetarian'],
+    default: 'non_vegetarian'
   }
 }, { timestamps: true });
 

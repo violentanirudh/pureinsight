@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PureInsight - Account</title>
+        <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+        <script src="https://unpkg.com/feather-icons"></script>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap");
+            * {
+                font-family: "Parkinsans";
+            }
+        </style>
+    </head>
+<body class="bg-white max-w-screen-xl mx-auto px-4 sm:px-8 py-6">
+    <%- include('partials/nav') %>
+
+    <div class="p-4 prose mt-4 mx-auto">
+        <a href="/deep/:ean" class="bg-green-700 px-4 py-2 text-white no-underline rounded inline-block mb-4">Get Deep Analysis</a>
+        <h1 class="text-2xl font-bold mb-4"><%= result.title %></h1>
+        <%- result.analysis %>
+    </div>
+
+</body>
+</html>

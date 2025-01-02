@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const connectDB = require('./services/mongodb'); // Import the database connection function
 const cookieParser = require('cookie-parser');
+const { validateToken } = require('./middlewares/authorization')
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
+app.use(validateToken)
 
 // Serve static files
 app.use('/js', express.static(path.join(__dirname, 'public/js'), {

@@ -4,7 +4,7 @@ exports.getIndex = (req, res) => {
 
 exports.getAccount = (req, res) => {
     if (req.cookies.token) {
-        return res.redirect('/scan');
+        return res.redirect('/scan'); 
     }
     res.render('account');
 };

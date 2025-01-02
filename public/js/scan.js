@@ -168,8 +168,9 @@
         if (stream) {
             stream.getTracks().forEach(track => track.stop());
         }
+
+        stream = null
         cameraContainer.classList.add('hidden');
-        startCameraBtn.classList.remove('hidden');
         cameraVideo.srcObject = null;
     });
 
