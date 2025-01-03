@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PureInsight - Account</title>
+        <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap");
+            * {
+                font-family: "Parkinsans";
+            }
+        </style>
+    </head>
+    <body class="bg-white max-w-screen-xl mx-auto px-4 sm:px-8 py-6">
+
+        <%- include('partials/nav') %>
+        
+
+        <!-- Chatbot Container -->
+        <div
+            class="fixed bottom-0 left-0 right-0 max-w-screen-lg mx-auto bg-white flex flex-col"
+            style="height: calc(100vh - 100px);"
+        >
+            <!-- Chat Messages -->
+            <div id="chat-messages" class="p-4 flex-grow overflow-y-auto space-y-2">
+                <!-- Render Previous Messages -->
+            </div>
+
+            <!-- Chat Input -->
+            <form id="chat-form" class="p-4 flex items-center space-x-2 bg-white rounded">
+                <input
+                    id="chat-input"
+                    type="text"
+                    placeholder="Type a message..."
+                    class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-300 focus:border-green-700"
+                />
+                <button
+                    type="submit"
+                    class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800 focus:outline-none"
+                >
+                    Send
+                </button>
+            </form>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script>
+            // Define chatMessages in a broader scope so it can be accessed by all functions
+            let chatMessages;
+        
+            document.addEventListener("DOMContentLoaded", async () => {
+                chatMessages = document.getElementById("chat-messages"); // Initialize chatMessages here
+                const sendButton = document.querySelector("#chat-form button");
+                const ean = "<%= ean %>"; // EAN passed from server-side rendering
+        
+                try {
+                    // Disable send button and show loading animation
+                    sendButton.disabled = true;
+                    sendButton.textContent = "Loading...";
+        
+                    // Show loading animation in the center of the chatbox
+                    const loadingBubble = document.createElement("div");
+                    loadingBubble.className =
+                        "flex justify-center items-center text-gray-500 text-sm italic";
+                    loadingBubble.innerHTML = "Generating response, please wait...";
+                    chatMessages.appendChild(loadingBubble);
+        
+                    // Fetch chats from the server
+                    const response = await fetch(`/api/load-chat/${ean}`);
+                    const data = await response.json();
+        
+                    // Remove loading animation once data is fetched
+                    chatMessages.removeChild(loadingBubble);
+        
+                    if (data.success) {
+
+                        console.log(data.chats);
+                        // Render chats dynamically in the UI
+                        Object.entries(data.chats).forEach(([timestamp, message]) => {
+                            const messageBubble = document.createElement("div");
+                            messageBubble.className =
+                                message.role === "user"
+                                    ? "bg-gray-100 text-black p-4 rounded self-end max-w-[70%] w-fit"
+                                    : "bg-white text-black p-4 rounded self-start max-w-[70%] w-fit border shadow-lg border-gray-200";
+                            messageBubble.innerHTML = marked.parse(message.text);
+                            chatMessages.appendChild(messageBubble);
+                        });
+        
+                        // Scroll to the latest message
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    } else {
+                        console.error(data.error);
+                    }
+                } catch (error) {
+                    console.error("Error loading chats:", error);
+                } finally {
+                    // Re-enable send button and reset text
+                    sendButton.disabled = false;
+                    sendButton.textContent = "Send";
+                }
+            });
+        
+            // Handle form submission for new messages
+            const chatForm = document.getElementById("chat-form");
+            const chatInput = document.getElementById("chat-input");
+        
+            chatForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const userMessage = chatInput.value.trim();
+        
+                if (userMessage) {
+                    // Display user's message in the UI
+                    const userBubble = document.createElement("div");
+                    userBubble.className =
+                        "bg-gray-50 text-black p-2 rounded-lg self-end max-w-[70%] w-fit";
+                    userBubble.textContent = userMessage;
+                    chatMessages.appendChild(userBubble); // Use global chatMessages variable
+        
+                    chatInput.value = "";
+        
+                    try {
+
+                        const response = await fetch("/api/chat", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ ean: "<%= ean %>", userMessage }),
+                        });
+        
+                        const data = await response.json();
+        
+                        if (data.success) {
+
+                            const botBubble = document.createElement("div");
+                            botBubble.className =
+                                "bg-white text-black p-4 rounded-lg self-start max-w-[70%] w-fit shadow-lg border border-gray-200";
+                            botBubble.innerHTML = `
+                                <div class="text-sm text-gray-500 mb-1">AI Response:</div>
+                                ${data.response}
+                            `;
+                            chatMessages.appendChild(botBubble);
+        
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        } else {
+                            console.error(data.error);
+                        }
+                    } catch (err) {
+                        console.error("Error:", err);
+                    }
+                }
+            });
+        </script>
+        
+    </body>
+</html>

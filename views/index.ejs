@@ -1,99 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PureInsight</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap');
-        * {
-            font-family: "Parkinsans";
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%- include('partials/head') %>
 </head>
-<body class="bg-white max-w-screen-xl mx-auto px-4 sm:px-8 py-6">
 
-    <%- include('partials/nav') %>
-    
-    <p class="bg-green-700 w-fit px-2 py-1 rounded mt-6 text-white w-full sm:text-center">
-        Powered by AI, Pure Insight delivers smarter, faster, and personalized product analysis for your healthiest choices.
-    </p>
-    
+<body class="">
+  <!-- Navbar -->
+  <%- include('partials/nav') %>
 
-    <!-- Hero Section -->
-    <div class="w-full mx-auto flex flex-col-reverse lg:flex-row py-12 items-center">
-        <!-- Text Content -->
-        <div class="lg:w-1/2">
-            <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 mb-2">
-                Pure Insight
-            </h1>
-            <p class="bg-green-700 w-fit px-2 py-1 rounded mb-6 text-white">
-                Clarity in Every Scan
-            </p>
-            <p class="text-zinc-600 mb-6">
-                Pure Insight empowers you to make healthier, informed decisions by unveiling the truth behind food, beverage, and cosmetic labels. Scan barcodes or ingredients to access detailed product insights, including benefits, risks, and side effects, helping you prioritize your well-being with confidence.
-            </p>
-            <div class="flex justify-start items-center space-y-4 md:space-y-0 md:space-x-6">
-                <button class="bg-green-700 text-white px-8 py-3 rounded hover:bg-green-800 transition-colors">
-                    Get Started
-                </button>
-            </div>
-        </div>
-    
-        <!-- Image Section -->
-        <div class="lg:w-1/2 flex justify-center lg:justify-end">
-            <img src="/img/pureinsight.png" class="w-full max-w-sm md:max-w-md lg:max-w-lg h-auto" alt="">
-        </div>
+  <section id="scan-product" class="bg-white py-12 px-4 max-w-screen-xl mx-auto">
+    <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+      <!-- Text Content -->
+      <div class="md:w-1/2 flex mt-8 md:mt-0 gap-8 mb-8 md:mb-0">
+        <img
+          src="/img/home.webp"
+          alt="Scan Product"
+          class="rounded-lg shadow-lg w-[90%] h-auto"
+        />
+      </div>
+
+      <div class="md:w-1/2 text-center md:text-left">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+          <span class="text-[#3d5e31]">Scan</span>
+          <span class="text-[#80956d]"> the</span>
+          <span class="text-[#3d5e31]">product</span>
+          <span class="text-[#80956d]"> to reveal</span>
+          <span class="inline-block md:inline text-[#3d5e31]">truth</span>
+          <br class="block md:hidden">
+          <span class="text-[#80956d]"> behind its label</span>
+        </h2>
+        <p class="text-gray-700 text-lg mb-6 py-5">
+          Pure Insight helps you make informed decisions by revealing the truth behind product labels. Scan barcodes or
+          ingredients to access detailed insights and prioritize your well-being.
+        </p>
+        <a href="/account" class="bg-green-700 text-white px-6 py-3 rounded-md hover:bg-green-800 transition-colors">
+          Get Started
+        </a>
+      </div>
+      
     </div>
+  </section>
+  
 
-    <section class="bg-green-50 py-12 px-6 rounded-lg w-full mx-auto">
-        <div class="flex flex-col lg:flex-row items-start md:items-center justify-between space-y-6">
-            <!-- Text Content -->
-            <div class="text-left w-full">
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Subscribe to our Newsletter</h2>
-                <p class="text-gray-600 text-sm">
-                    Stay updated with the latest insights, tips, and trends delivered straight to your inbox.
-                </p>
-            </div>
+  <section id="check-ingredients" class="max-w-screen-xl mx-auto py-20 px-6 bg-white">
+    <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+      <!-- Text Content -->
+      <div class="md:w-1/2 text-center md:text-left">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8">
+          Check ingredients in three simple steps
+        </h2>
+        <ul class="space-y-4">
+          <!-- Step 1 -->
+          <li class="flex items-center space-x-4">
+            <div class="flex items-center justify-center w-10 h-10 bg-[#99b182] text-[#3d5e31] rounded-full font-bold text-lg">1</div>
+            <p class="text-gray-700 text-lg">Scan the product barcode.</p>
+          </li>
+          <!-- Step 2 -->
+          <li class="flex items-center space-x-4">
+            <div class="flex items-center justify-center w-10 h-10 bg-[#99b182] text-[#3d5e31] rounded-full font-bold text-lg">2</div>
+            <p class="text-gray-700 text-lg">See the ingredients and their ratings.</p>
+          </li>
+          <!-- Step 3 -->
+          <li class="flex items-center space-x-4">
+            <div class="flex items-center justify-center w-10 h-10 bg-[#99b182] text-[#3d5e31] rounded-full font-bold text-lg">3</div>
+            <p class="text-gray-700 text-lg">Discover cleaner and healthier product alternatives.</p>
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Image Content -->
+      <div class="md:w-1/2 flex justify-center relative">
+        <img src="/img/scanner.jpg" alt="Check Ingredients" class="rounded-lg w-[90%] h-auto">
+      </div>
+    </div>
+  </section>
+  
 
-            <!-- Input and Button -->
-            <form class="flex flex-col sm:flex-row items-start md:items-center w-full lg:w-auto space-y-2 sm:space-y-0 sm:space-x-2">
-                <!-- Email Input -->
-                <input 
-                    type="email" 
-                    placeholder="Enter your email" 
-                    class="w-full sm:w-auto px-4 py-3 border border-green-700 rounded outline-none focus:border-green-700 focus:ring focus:ring-green-300"
-                    required
-                />
-                <!-- Subscribe Button -->
-                <button 
-                    type="submit" 
-                    class="bg-green-700 text-white px-6 py-3 rounded hover:bg-green-800 transition duration-300"
-                >
-                    Subscribe
-                </button>
-            </form>
+  <section id="independence" class="max-w-screen-xl mx-auto py-20 bg-white-py-12 px-4">
+    <div class="container mx-auto text-center">
+      <!-- Title -->
+      <h2 class="text-3xl md:text-4xl font-bold mb-8 text-gray-900">
+        100% Independent & No External Influence
+      </h2>
+
+      <!-- Content Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- No Influence -->
+        <div class="flex flex-col items-center text-center p-6">
+          <div class="bg-[#cce2c5] rounded-full p-4 mb-4">
+            <img src="img/influencer.png" alt="No Influence Icon" class="h-16 w-16 ">
+          </div>
+          <h3 class="text-xl font-semibold text-[#3d5e31] mb-2">No Influence</h3>
+          <p class="text-gray-700">
+            Brand involvement is strictly prohibited from influencing our content, ensuring unadulterated, unbiased
+            opinions.
+          </p>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="bg-white mt-4">
-        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="text-zinc-600 text-sm">
-                    © 2024 PureInsight. All rights reserved.
-                </div>
-                <div class="flex space-x-4 mt-4 md:mt-0">
-                    <a href="#" class="text-zinc-500 hover:text-green-700 text-sm">Privacy Policy</a>
-                    <a href="#" class="text-zinc-500 hover:text-green-700 text-sm">Terms of Service</a>
-                </div>
-            </div>
+        <!-- No Ads -->
+        <div class="flex flex-col items-center text-center p-6">
+          <div class="bg-[#cce2c5] rounded-full p-4 mb-4">
+            <img src="img/no-ads.png" alt="No Ads Icon" class="h-16 w-16">
+          </div>
+          <h3 class="text-xl font-semibold text-[#3d5e31] mb-2">No Ads</h3>
+          <p class="text-gray-700">
+            Our website proudly remains ad-free, providing an uninterrupted experience for our users, allowing them to
+            focus on valuable content.
+          </p>
         </div>
-    </footer>
+      </div>
+    </div>
+  </section>
+  <!-- Independent & No External Influence Section ends -->
 
-    <script src="/js/common.js"></script>
+  <!-- Section: Check the quality of your cosmetics -->
+  <section id="cosmetics-quality" class="max-w-screen-xl py-20 mx-auto px-6">
+    <div class="max-w-screen-lg mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+      <!-- Text Content -->
+      <div class="md:w-1/2 text-center md:text-left">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+          Also, check the quality of your <span class="italic">cosmetics</span>!
+        </h2>
+        <p class="text-gray-600 leading-relaxed mb-6">
+          Cosmetic products often contain hidden risks, such as endocrine disruptors, carcinogens, allergens, or irritants.
+          With PureInsight, you can uncover the health effects of your personal care items and make safer choices for your well-being.
+        </p>
+      </div>
+  
+      <!-- Image Content -->
+      <div class="md:w-1/2 flex justify-center relative">
+        <div class="relative">
+          <!-- Background Image -->
+          <!-- Foreground Image -->
+          <img src="/img/cream.jpg" alt="Cosmetic Product" 
+            class="rounded-lg max-w-full h-auto relative z-[1]">
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section: Evaluate the quality of your foods -->
+  <section id="foods-quality" class="max-w-screen-xl mx-auto py-20 px-6">
+    <div class="max-w-screen-lg mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <!-- Image Content -->
+      <div class="relative">
+        <img src="/img/bournvita.jpg" alt="Foods Product" class="rounded-lg w-full md:w-96 h-auto">
+        <!-- Rating Badge -->
+        
+      </div>
+  
+      <!-- Product Details -->
+      <div class="text-center md:text-left space-y-6">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 leading-tight">
+          Evaluate the quality of your <span class="italic">foods</span>
+        </h2>
+        <p class="text-gray-600 leading-relaxed">
+          Make informed choices with confidence! Our innovative scanner <strong>PureInsight</strong> quickly decodes labels to reveal the truth about your purchase, guiding you towards healthier options.
+        </p>
+      </div>
+    </div>
+  </section>
+  
+
+  <!-- Pricing Plans Section -->
+  <div class="container mx-auto p-6 mb-12 flex flex-col md:flex-row justify-center items-stretch gap-6">
+    <!-- Credit Plan -->
+    <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-start enterprise-plan w-full md:w-1/3">
+      <h2 class="text-xl font-bold mb-2">Credit Plan</h2>
+      <p class="text-4xl font-bold text-gray-800">₹0</p>
+      <p class="text-sm text-gray-600 mb-4">per month</p>
+      <button class="bg-black text-white px-6 py-3 rounded-md mt-4 hover:bg-gray-800">Earned Credits</button>
+      <p class="text-gray-600 mt-6">
+        Includes all Professional Plan features, plus comprehensive analytics and customization options.
+      </p>
+      <ul class="mt-6 space-y-3 text-gray-600">
+        <li class="flex items-center">
+          <i data-feather="check" class="w-5 h-5 text-green-500 mr-2"></i> Custom Analytics
+        </li>
+        <li class="flex items-center">
+          <i data-feather="check" class="w-5 h-5 text-green-500 mr-2"></i> Dedicated Account Manager
+        </li>
+        <li class="flex items-center">
+          <i data-feather="check" class="w-5 h-5 text-green-500 mr-2"></i> API Access
+        </li>
+      </ul>
+    </div>
+  
+    <!-- Premium Plan -->
+    <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-start starter-plan w-full md:w-1/3">
+      <h2 class="text-xl font-bold mb-2">Premium Plan</h2>
+      <p class="text-4xl font-bold text-gray-800">₹149</p>
+      <p class="text-sm text-gray-600 mb-4">per month</p>
+      <button class="bg-black text-white px-6 py-3 rounded-md mt-4 hover:bg-gray-800">More Info</button>
+      <p class="text-gray-600 mt-6">
+        Healthier life in exchange for the price of one burger.
+      </p>
+      <ul class="mt-6 space-y-3 text-gray-600">
+        <li class="flex items-center">
+          <i data-feather="check" class="w-5 h-5 text-green-500 mr-2"></i> Chat Bot: Unlimited conversations with AI
+        </li>
+        <li class="flex items-center">
+          <i data-feather="check" class="w-5 h-5 text-green-500 mr-2"></i> Search: Search for any product without scanning
+        </li>
+        <li class="flex items-center">
+          <i data-feather="check" class="w-5 h-5 text-green-500 mr-2"></i> Consumption: Track daily product consumption
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <footer class="bg-[#fff7de] text-gray-600 py-12">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0">
+      <!-- Branding Section -->
+      <div class="flex flex-col items-start space-y-2">
+        <img src="/img/logo.png" alt="Brand Logo" class="h-12">
+        <p class="text-sm">
+          Empowering healthier choices with our innovative tools.
+        </p>
+        <p class="text-sm text-gray-500">&copy; 2025 PureInsight. All rights reserved.</p>
+      </div>
+  
+      <!-- Navigation Links -->
+      <div class="flex flex-wrap gap-6 w-full md:w-1/3 lg:w-1/4 justify-between">
+        <div>
+          <h4 class="font-semibold mb-2">Quick Links</h4>
+          <ul class="space-y-1">
+            <li><a href="/" class="hover:text-gray-800">Home</a></li>
+            <li><a href="/aboutus" class="hover:text-gray-800">About Us</a></li>
+            <li><a href="/search" class="hover:text-gray-800">Search</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2">Resources</h4>
+          <ul class="space-y-1">
+            <li><a href="/blogs" class="hover:text-gray-800">Blog</a></li>
+          </ul>
+        </div>
+      </div>
+
+      </div>
+  
+  </footer>
+  
+  
+  <!-- Feather Icons Script -->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script>
+    feather.replace();
+  </script>
+  
+
+
+
 
 </body>
 </html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/style.css" rel="stylesheet">
+  <%- include('partials/head') %>
+</head>
+
+<body class="bg-white">
+  <%- include('partials/nav') %>
+
+  <!-- Blog Section -->
+  <section class="relative bg-green-50 py-20 text-center">
+    <h1 class="text-4xl font-bold text-gray-800 mb-2">Blog</h1>
+    <p class="text-lg text-gray-600">Our Recommendations for Your Better Health</p>
+  </section>
+
+  <div class="container mx-auto px-4 py-8">
+
+    <nav class="flex items-center gap-8 mb-12 overflow-x-auto pb-4">
+        <a href="/blog/health" class="text-gray-400 hover:text-gray-600 font-medium whitespace-nowrap">Healthy Recipes</a>
+        <a href="/blog/skin" class="text-gray-400 hover:text-gray-600 font-medium whitespace-nowrap">Skin-Care</a>  
+    </nav>
+
+    <!-- Recipe Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% blogs.forEach(blog => { %>
+        <div class="recipe-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow p-4">
+          <img src="<%= blog.image %>" alt="<%= blog.title %>" class="w-full h-64 object-cover rounded-lg">
+          <h2 class="text-xl font-bold mt-4"><a href="/recipe/<%= blog.slug %>"><%= blog.title %></a></h2>
+          <div class="flex items-center gap-2 mt-2">
+            <div class="flex text-yellow-400">
+              <% for (let i = 0; i < Math.floor(blog.rating); i++) { %>★<% } %>
+              <% if (blog.rating % 1 !== 0) { %>½<% } %>
+            </div>
+            <span class="text-gray-600"><%= blog.time %></span>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</body>
+
+</html>

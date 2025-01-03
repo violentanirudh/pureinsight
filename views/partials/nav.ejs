@@ -1,45 +1,55 @@
-<nav class="bg-white">
-    <div class="w-full mx-auto px-4">
-        <div class="flex justify-between h-16">
-            <!-- Logo -->
-            <div class="flex items-center">
-                <span class="text-green-700 text-xl font-bold">PureInsight</span>
-            </div>
-
-            <!-- Desktop Menu -->
-            <div class="hidden sm:flex items-center space-x-8">
-                <a href="/search" class="text-zinc-600 hover:text-green-700 transition-colors">Search</a>
-                <a href="/scan" class="text-zinc-600 hover:text-green-700 transition-colors">Scan</a>
-                <a href="/api" class="text-zinc-600 hover:text-green-700 transition-colors">API</a>
-                <!-- <a href="/pricing" class="text-zinc-600 hover:text-green-700 transition-colors">Pricing</a> -->
-                <% if (locals.user) { %>
-                    <a href="/profile" class="bg-green-700 text-white px-8 py-3 rounded hover:bg-green-800 transition-colors">Account</a>
-                <% } else { %>
-                    <a href="/account" class="bg-green-700 text-white px-8 py-3 rounded hover:bg-green-800 transition-colors">Account</a>
-                <% } %>
-            </div>
-
-            <!-- Mobile Menu Button -->
-            <div class="sm:hidden flex items-center">
-                <button class="text-zinc-600" id="mobile-menu-button">
-                    <i data-feather="menu"></i>
-                </button>
-            </div>
+<nav class="bg-[#fff7de] shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-2">
+      <div class="flex justify-between items-center h-16">
+        <!-- Brand -->
+        <a href="/" class="flex items-center space-x-2">
+          <img src="/img/logo.png" alt="MyWebsite Logo" class="h-12 w-auto">
+        </a>
+  
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-6">
+          <a href="/aboutus" class="text-gray-600 hover:text-green-500 transition-colors">About Us</a>
+          <a href="/blog" class="text-gray-600 hover:text-green-500 transition-colors">Blog</a>
+          <a href="/qr" class="text-gray-600 hover:text-green-500 transition-colors">QR Codes</a>
+          <% if (locals.user) { %>
+            <a href="/scan" class="text-gray-600 hover:text-green-500 transition-colors">Scan</a>
+            <a href="/search" class="text-gray-600 hover:text-green-500 transition-colors">Search</a>
+            <a href="/profile" class="text-zinc-600 hover:text-green-700 transition-colors">Account</a>
+        <% } else { %>
+            <a href="/account" class="text-zinc-600 hover:text-green-700 transition-colors">Account</a>
+        <% } %>
         </div>
-
-        <!-- Mobile Menu -->
-        <div class="hidden md:hidden" id="mobile-menu">
-            <div class="flex justify-between items-center py-4">
-                <a href="/search" class="text-zinc-600 hover:text-green-700 transition-colors">Search</a>
-                <a href="/scan" class="text-zinc-600 hover:text-green-700 transition-colors">Scan</a>
-                <a href="/api" class="text-zinc-600 hover:text-green-700 transition-colors">API</a>
-                <!-- <a href="/pricing" class="text-zinc-600 hover:text-green-700 transition-colors">Pricing</a> -->
-                <% if (locals.user) { %>
-                    <a href="/profile" class="text-zinc-600 hover:text-green-700 transition-colors">Account</a>
-                <% } else { %>
-                    <a href="/account" class="text-zinc-600 hover:text-green-700 transition-colors">Account</a>
-                <% } %>
-            </div>
-        </div>
+  
+        <!-- Hamburger Button -->
+        <button id="menu-btn" class="md:hidden focus:outline-none text-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+          </svg>
+        </button>
+      </div>
+  
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="hidden md:hidden space-y-2 text-center py-6">
+            <a href="/aboutus" class="text-gray-600 hover:text-green-500 block transition-colors">About Us</a>
+            <a href="/blog" class="text-gray-600 hover:text-green-500 block transition-colors">Blog</a>
+            <a href="/qr" class="text-gray-600 hover:text-green-500 block transition-colors">QR Codes</a>
+            <% if (locals.user) { %>
+            <a href="/scan" class="text-gray-600 hover:text-green-500 block transition-colors">Scan</a>
+            <a href="/search" class="text-gray-600 hover:text-green-500 block transition-colors">Search</a>
+            <a href="/profile" class="text-zinc-600 hover:text-green-700 block transition-colors">Account</a>
+        <% } else { %>
+            <a href="/account" class="text-zinc-600 hover:text-green-700 block transition-colors">Account</a>
+        <% } %>
+      </div>
     </div>
-</nav>
+  </nav>
+
+  <script>
+    // Mobile Menu Toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+  
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products with QR Codes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900">
+
+  <div class="container mx-auto py-8">
+    <h1 class="text-4xl font-bold mb-6 text-center text-green-700">Products with QR Codes</h1>
+
+    <!-- Table for products and QR codes -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+        <thead>
+          <tr class="bg-green-700 text-white uppercase text-sm leading-normal">
+            <th class="py-3 px-6 text-left">Name</th>
+            <th class="py-3 px-6 text-left">QR Code</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700 text-sm font-light">
+          <% products.forEach(product => { %>
+          <tr class="border-b border-gray-200 hover:bg-green-100">
+            <td class="py-3 px-6">
+              <span class="font-medium"><%= product.title %></span>
+            </td>
+            <td class="py-3 px-6 w-40">
+              <img src="<%= product.qrCode %>" alt="QR Code" class="h-auto w-full rounded-lg shadow-sm">
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="flex justify-between items-center mt-6">
+      <!-- Previous Page Button -->
+      <% if (hasPrevPage) { %>
+      <a href="/qr?page=<%= prevPage %>" 
+         class="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800">
+        Previous
+      </a>
+      <% } else { %>
+      <span class="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed">Previous</span>
+      <% } %>
+
+      <!-- Current Page Indicator -->
+      <span>Page <%= currentPage %> of <%= totalPages %></span>
+
+      <!-- Next Page Button -->
+      <% if (hasNextPage) { %>
+      <a href="/qr?page=<%= nextPage %>" 
+         class="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800">
+        Next
+      </a>
+      <% } else { %>
+      <span class="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed">Next</span>
+      <% } %>
+
+      <!-- Last Page Button -->
+      <% if (currentPage !== totalPages) { %>
+      <a href="/qr?page=<%= totalPages %>" 
+         class="px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800">
+        Last Page
+      </a>
+      <% } else { %>
+      <span class="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed">Last Page</span>
+      <% } %>
+    </div>
+
+  </div>
+
+</body>
+</html>

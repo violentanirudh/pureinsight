@@ -161,24 +161,22 @@
                     >
                 </div>
 
-                <!-- Activity Level -->
                 <div>
                     <label
                         for="activity"
                         class="block text-sm font-medium text-gray-700 mb-2"
                         >Activity Level</label
                     >
-                    <select id="activity" name="activity"  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                      <option value="" disabled <%= !locals.user.activity ? 'selected' : '' %>>Select your activity level</option>
-                      <option value="sedentary" <%= locals.user.activity === 'sedentary' ? 'selected' : '' %>>Sedentary</option>
-                      <option value="lightly_active" <%= locals.user.activity === 'lightly_active' ? 'selected' : '' %>>Lightly Active</option>
-                      <option value="moderately_active" <%= locals.user.activity === 'moderately_active' ? 'selected' : '' %>>Moderately Active</option>
-                      <option value="very_active" <%= locals.user.activity === 'very_active' ? 'selected' : '' %>>Very Active</option>
-                      <option value="super_active" <%= locals.user.activity === 'super_active' ? 'selected' : '' %>>Super Active</option>
+                    <select id="activity" name="activityLevel"  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                      <option value="" disabled <%= !locals.user.activityLevel ? 'selected' : '' %>>Select your activity level</option>
+                      <option value="sedentary" <%= locals.user.activityLevel === 'sedentary' ? 'selected' : '' %>>Sedentary</option>
+                      <option value="lightly_active" <%= locals.user.activityLevel === 'lightly_active' ? 'selected' : '' %>>Lightly Active</option>
+                      <option value="moderately_active" <%= locals.user.activityLevel === 'moderately_active' ? 'selected' : '' %>>Moderately Active</option>
+                      <option value="very_active" <%= locals.user.activityLevel === 'very_active' ? 'selected' : '' %>>Very Active</option>
+                      <option value="super_active" <%= locals.user.activityLevel === 'super_active' ? 'selected' : '' %>>Super Active</option>
                     </select>                    
                 </div>
 
-                <!-- Gender -->
                 <div>
                     <label
                         for="gender"
@@ -194,38 +192,35 @@
                     </select>                    
                 </div>
 
-                <!-- Age Group -->
                 <div>
                     <label
                         for="age_group"
                         class="block text-sm font-medium text-gray-700 mb-2"
                         >Age Group</label
                     >
-                    <select id="age_group" name="age_group"  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <select id="age_group" name="ageGroup"  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                       <option value="" disabled <%= !locals.user.age_group ? 'selected' : '' %>>Select your age group</option>
-                      <option value="child" <%= locals.user.age_group === 'child' ? 'selected' : '' %>>Child (0-12)</option>
-                      <option value="teen" <%= locals.user.age_group === 'teen' ? 'selected' : '' %>>Teen (13-19)</option>
-                      <option value="adult" <%= locals.user.age_group === 'adult' ? 'selected' : '' %>>Adult (20-59)</option>
-                      <option value="senior" <%= locals.user.age_group === 'senior' ? 'selected' : '' %>>Senior (60+)</option>
+                      <option value="child" <%= locals.user.ageGroup === 'child' ? 'selected' : '' %>>Child (0-12)</option>
+                      <option value="teen" <%= locals.user.ageGroup === 'teen' ? 'selected' : '' %>>Teen (13-19)</option>
+                      <option value="adult" <%= locals.user.ageGroup === 'adult' ? 'selected' : '' %>>Adult (20-59)</option>
+                      <option value="senior" <%= locals.user.ageGroup === 'senior' ? 'selected' : '' %>>Senior (60+)</option>
                     </select>                    
                 </div>
 
-                <!-- Dietary Restriction -->
                 <div>
                     <label
                         for="dietary_restriction"
                         class="block text-sm font-medium text-gray-700 mb-2"
                         >Dietary Restriction</label
                     >
-                    <select id="dietary_restriction" name="dietary_restriction"  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                      <option value="" disabled <%= !locals.user.dietary_restriction ? 'selected' : '' %>>Select your dietary preference</option>
-                      <option value="vegan" <%= locals.user.dietary_restriction === 'vegan' ? 'selected' : '' %>>Vegan</option>
-                      <option value="vegetarian" <%= locals.user.dietary_restriction === 'vegetarian' ? 'selected' : '' %>>Vegetarian</option>
-                      <option value="non_vegetarian" <%= locals.user.dietary_restriction === 'non_vegetarian' ? 'selected' : '' %>>Non-Vegetarian</option>
+                    <select id="dietary_restriction" name="dietaryRestriction"  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                      <option value="" disabled <%= !locals.user.dietaryRestriction ? 'selected' : '' %>>Select your dietary preference</option>
+                      <option value="vegan" <%= locals.user.dietaryRestriction === 'vegan' ? 'selected' : '' %>>Vegan</option>
+                      <option value="vegetarian" <%= locals.user.dietaryRestriction === 'vegetarian' ? 'selected' : '' %>>Vegetarian</option>
+                      <option value="non_vegetarian" <%= locals.user.dietaryRestriction === 'non_vegetarian' ? 'selected' : '' %>>Non-Vegetarian</option>
                     </select>                    
                 </div>
 
-                <!-- Submit Button -->
                 <button
                     type="submit"
                     class="w-full bg-green-700 text-white py-2 px-4 rounded-md hover:bg-green-800 transition-colors"

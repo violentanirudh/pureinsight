@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${recipe.title}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <header class="mb-8">
+      <h1 class="text-5xl font-bold text-gray-900 mb-2">${recipe.title}</h1>
+      <div class="flex items-center gap-4 text-gray-600">
+        <span>Rating: ${recipe.rating} ⭐</span>
+        <span>Time: ${recipe.time}</span>
+      </div>
+    </header>
+
+    <div class="image-gallery mb-8">
+      <img src="${recipe.image}" alt="${recipe.title}" 
+           class="w-full h-96 object-cover rounded-lg shadow-lg">
+    </div>
+
+    <div class="content">
+      ${recipe.recipe}
+    </div>
+  </div>
+</body>
+</html>

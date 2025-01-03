@@ -4,7 +4,13 @@ const { scan } = require("../controllers/authController");
 const { protect } = require("../middlewares/authorization");
 const Analysis = require("../models/Analysis");
 const User = require("../models/User");
+const Chat = require("../models/Chat");
 const Verified = require("../models/Verified");
+const {
+    generateSessionId,
+    handleChatMessage,
+} = require("../services/chatServices");
+const { htmlToText } = require("html-to-text");
 
 function isValidEAN(ean) {
     if (!/^\d{13}$/.test(ean)) return false; // Ensure 13 numeric digits
@@ -20,6 +26,36 @@ function isValidEAN(ean) {
 
     return calculatedCheckDigit === checkDigit;
 }
+
+function stripHtml(htmlContent) {
+    return htmlToText(htmlContent, {
+        wordwrap: false,
+        preserveNewlines: true,
+    });
+}
+
+function calculateBMI(height, weight) {
+    if (height <= 0 || weight <= 0) return null;
+    const heightInMeters = height / 100;
+    return parseFloat((weight / (heightInMeters ** 2)).toFixed(2));
+}
+
+router.get("/deep/:ean", protect("user", "admin"), async (req, res) => {
+    const { ean } = req.params;
+
+    try {
+        const verifiedProduct = await Verified.findOne({ ean });
+
+        if (!verifiedProduct) {
+            return res.redirect("/search");
+        }
+
+        res.render("deep", { ean });
+    } catch (error) {
+        console.error("Error checking EAN in Verified:", error);
+        res.redirect("/search");
+    }
+});
 
 router.get("/scan", protect("user", "admin"), scan);
 
@@ -135,9 +171,9 @@ router.post("/profile", protect("user", "admin"), async (req, res) => {
             "activityLevel",
             "gender",
             "ageGroup",
-            "dietaryRestriction"  
+            "dietaryRestriction",
         ];
-        
+
         const filteredData = Object.keys(updatedData)
             .filter((key) => allowedUpdates.includes(key))
             .reduce((obj, key) => {
@@ -209,5 +245,150 @@ router.post(
         }
     }
 );
+
+router.post("/api/chat", protect("user", "admin"), async (req, res) => {
+    try {
+        const { user } = req;
+        const { ean } = req.body; // Assuming EAN is sent in the body
+        const { userMessage } = req.body;
+
+        // Validate required fields
+        if (!user || !ean || !userMessage) {
+            return res.status(400).json({
+                success: false,
+                error: "Missing required fields: user, EAN, or userMessage.",
+            });
+        }
+
+        // Call the handleChatMessage function
+        const result = await handleChatMessage(user, ean, userMessage);
+
+        // Check if the function succeeded
+        if (result.success) {
+            return res.status(200).json({ success: true, response: result.response });
+        } else {
+            return res.status(400).json({ success: false, error: result.error });
+        }
+    } catch (error) {
+        console.error("Error in /api/chat route:", error);
+
+        // Handle unexpected errors
+        return res.status(500).json({
+            success: false,
+            error: "An unexpected error occurred. Please try again later.",
+        });
+    }
+});
+
+router.get("/api/load-chat/:ean", protect("user", "admin"), async (req, res) => {
+    const { ean } = req.params;
+    const user = req.user;
+
+    try {
+        // Generate session ID based on user ID and EAN code
+        const sessionId = generateSessionId(user._id, ean);
+
+        // Check if the EAN exists in the Verified collection
+        const verifiedProduct = await Verified.findOne({ ean });
+        if (!verifiedProduct) {
+            return res.status(404).json({
+                success: false,
+                error: "Product not found for the provided EAN.",
+            });
+        }
+
+        // Reload or retrieve the latest chat session
+        let chatSession = await Chat.findOne({ sessionId });
+
+        if (!chatSession || Object.keys(chatSession.chats).length === 0) {
+            // Fetch user data for personalization
+            const userData = await User.findById(user._id);
+            if (!userData) {
+                return res.status(404).json({
+                    success: false,
+                    error: "User data not found.",
+                });
+            }
+
+            const bmi = calculateBMI(userData.height, userData.weight);
+
+            const prompt = `
+You are a certified nutritionist, food safety expert, and skincare specialist. Analyze the following product based on its ingredients and provide a detailed assessment.
+Be Strict with the information, You are here to help people make informed decisions about their health and well-being. Don't let them consume harmful products.
+
+User Information:
+- Name: ${userData.name}
+- Age Group: ${userData.ageGroup}
+- Gender: ${userData.gender}
+- Height: ${userData.height} cm
+- Weight: ${userData.weight} kg
+- BMI: ${
+                bmi
+                    ? `${bmi} (${bmi < 18.5 ? "Underweight" : bmi < 24.9 ? "Normal" : bmi < 29.9 ? "Overweight" : "Obese"})`
+                    : "Not available"
+            }
+- Activity Level: ${userData.activityLevel}
+- Dietary Restriction: ${userData.dietaryRestriction}
+- Allergies: ${userData.allergies || "None"}
+- Illnesses: ${userData.illness || "None"}
+- Skin Type: ${userData.skin || "Not specified"}
+- Goals: ${userData.goals || "Not specified"}
+
+Product Information:
+- Title: ${verifiedProduct.title}
+- Details: ${verifiedProduct.text}
+
+Analysis Guidance:
+${stripHtml(verifiedProduct.analysis)}
+
+Important Instructions:
+1. Consider every aspect of user and product information for a comprehensive analysis.
+2. If the user's question is valid and related to health or the product or a follow up question, provide a detailed response based on your expertise.
+3. Provide your assessment in valid HTML format (no <html>, <head>, <body> tags), don't use any background or shadows or padding at all.
+4. Provide plain text (not a codeblock of HTML).
+5. If the user asks a question unrelated to health, nutrition, skincare, or the product being analyzed, respond politely with:
+   "I'm here to assist with questions related to health, nutrition, skincare, or this product. Please ask a relevant question so I can help you better."
+`;
+
+            chatSession = new Chat({ sessionId });
+            await chatSession.save();
+
+            const aiResponse = await handleChatMessage(user, ean, prompt);
+
+            if (!aiResponse.success) {
+                return res.status(500).json({
+                    success: false,
+                    error: "Failed to generate initial chat response.",
+                });
+            }
+        } else {
+            // Reload the chat session to ensure it's updated
+            chatSession = await Chat.findOne({ sessionId }).lean();
+        }
+
+        let newChats = await Chat.findOne({ sessionId });
+
+        // Filter out the very first user-generated message
+        const filteredChats = Object.entries(newChats.chats)
+            .filter(([timestamp, message], index) => !(index === 0 && message.role === "user"))
+            .reduce((acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            }, {});
+
+        // Return filtered chats to the frontend
+        res.json({
+            success: true,
+            chats: filteredChats,
+        });
+    } catch (error) {
+        console.error("Error loading chat:", error);
+        res.status(500).json({
+            success: false,
+            error: "An unexpected error occurred.",
+        });
+    }
+});
+
 
 module.exports = router;

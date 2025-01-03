@@ -1,0 +1,50 @@
+[
+    {
+        "title": "Vegetable Poha",
+        "rating": 5,
+        "time": "20 minutes",
+        "recipe": "<p>This is a healthy and delicious recipe for Vegetable Poha...</p>",
+        "image": "/img/vegetable-poha.jpg",
+        "slug": "vegetable-poha"
+    },
+    {
+        "title": "Oats Chilla",
+        "rating": 4.5,
+        "time": "35 minutes",
+        "recipe": "<p>Oats Chilla is a nutritious breakfast option...</p>",
+        "image": "/img/oats-chilla.jpg",
+        "slug": "oats-chilla"
+    },
+    {
+        "title": "Ragi Roti",
+        "rating": 5,
+        "time": "20 minutes",
+        "recipe": "<p>Ragi Roti is a healthy and traditional Indian flatbread...</p>",
+        "image": "/img/ragi-roti.jpeg",
+        "slug": "ragi-roti"
+    },
+    {
+        "title": "Palak Paneer",
+        "rating": 5,
+        "time": "20 minutes",
+        "recipe": "<p>Palak Paneer is a classic North Indian dish made with spinach and paneer...</p>",
+        "image": "/img/palak-paneer.jpg",
+        "slug": "palak-paneer"
+    },
+    {
+        "title": "Soya Chunks Curry",
+        "rating": 4.5,
+        "time": "35 minutes",
+        "recipe": "<p>Soya Chunks Curry is a protein-rich and flavorful dish...</p>",
+        "image": "/img/soya-chunks-curry.jpg",
+        "slug": "soya-chunks-curry"
+    },
+    {
+        "title": "Masala Khichdi",
+        "rating": 5,
+        "time": ":20 minutes",
+        "recipe":"< Masala comforting wholesome meal...",
+        "image":"masalakichdi.jpg",
+        "slug":"masala-khichdi"
+    }
+]
